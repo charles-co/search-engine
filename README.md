@@ -1,7 +1,7 @@
-initial commands to run in project directory(where you have .csproj):
+initial commands to run in Api/ directory(where you have .csproj):
 
 Start postgresql service if using docker
-1. docker-compose up --build
+1. docker-compose up --build 
 
 2. dotnet build
 if no error, goto 2
