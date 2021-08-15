@@ -13,7 +13,7 @@ namespace searchEngine.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     FilePath = table.Column<string>(type: "text", nullable: false),
-                    addedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    AddedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {

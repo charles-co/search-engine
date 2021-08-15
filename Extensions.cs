@@ -9,7 +9,7 @@ namespace Document
             {
                 Id = document.Id,
                 FilePath = document.FilePath,
-                AddedOn = document.addedOn
+                AddedOn = document.AddedOn
             };
         }
     }

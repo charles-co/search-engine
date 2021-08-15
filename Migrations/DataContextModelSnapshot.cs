@@ -25,12 +25,12 @@ namespace searchEngine.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTimeOffset>("AddedOn")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("FilePath")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("addedOn")
-                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 

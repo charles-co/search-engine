@@ -11,6 +11,6 @@ namespace Document.Models
         [Required]
         [Display(Name = "Supported Files .pdf | .xlx | .docx")]
         public string FilePath { get; set; }
-        public DateTimeOffset addedOn { get; init; }
+        public DateTimeOffset AddedOn { get; init; }
     }
 }

@@ -14,7 +14,7 @@ using Microsoft.OpenApi.Models;
 using Document.Data;
 using Document.Repositories;
 using Microsoft.EntityFrameworkCore;
-
+using DotNetEnv;
 
 namespace searchEngine
 {
@@ -30,7 +30,14 @@ namespace searchEngine
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            DotNetEnv.Env.Load(".envs/.local/.postgres");
+            var Host = DotNetEnv.Env.GetString("POSTGRES_HOST");
+            var Port = DotNetEnv.Env.GetInt("POSTGRES_PORT");
+            var Db = DotNetEnv.Env.GetString("POSTGRES_DB");
+            var Username = DotNetEnv.Env.GetString("POSTGRES_USER");
+            var Password = DotNetEnv.Env.GetString("POSTGRES_Password");
+            var connection = $"Host={Host};Server=127.0.0.1;Port={Port};Database={Db};Username={Username};Password={Password}";
+            services.AddDbContext<DataContext>(options => options.UseNpgsql(connection));
             services.AddScoped<IDataContext>(provider => provider.GetService<DataContext>());
             services.AddScoped<IDocumentRepository, DocumentRepository>();
             services.AddControllers();

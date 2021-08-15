@@ -3,34 +3,17 @@ version: "3"
 volumes:
   search_engine_postgres_data: {}
   search_engine_postgres_data_backups: {}
-  search_engine_pgadmin : {}
 
 services:
 
     postgres:
         image: postgres:11
-        environment: 
-            # - POSTGRES_USER = postgres
-            # - POSTGRES_PASSWORD = password1234
-            # - POSTGRES_DB = search_engine_db
-        container_name: postgres
+        container_name: postgres_search_engine
         volumes:
-        - search_engine_postgres_data:/var/lib/postgresql/data:Z
-        - search_engine_postgres_data_backups:/backups:z
+            - search_engine_postgres_data:/var/lib/postgresql/data:Z
+            - search_engine_postgres_data_backups:/backups:z
         env_file:
-        - ./.envs/.local/.postgres
+            - ./.envs/.local/.postgres
         ports:
-        - "0.0.0.0:5432:5432"
+            - "127.0.0.1:5432:5432"
         restart: always
-
-    pgadmin:
-        image: dpage/pgadmin4
-        environment: 
-            # - PGADMIN_DEFAULT_EMAIL = pgadmin@pgadmin.org
-            # - PGADMIN_DEFAULT_PASSWORD = password1234
-        ports: 
-            - "5050:80"
-        restart: always
-        volumes: 
-            - search_engine_pgadmin:/root/.pgadmin
-

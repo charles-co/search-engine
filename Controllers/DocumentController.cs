@@ -44,7 +44,7 @@ namespace Document.Controllers
             {   
                 Id = Guid.NewGuid(),
                 FilePath = createDocumentDto.FilePath,
-                addedOn = DateTimeOffset.UtcNow,
+                AddedOn = DateTimeOffset.UtcNow,
             };
             await _documentRepository.Add(document);
             return CreatedAtAction(nameof(GetDocument), new { id = document.Id }, document.AsDto());

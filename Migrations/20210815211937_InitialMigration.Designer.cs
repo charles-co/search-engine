@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace searchEngine.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210815091831_InitialMigration")]
+    [Migration("20210815211937_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,12 +27,12 @@ namespace searchEngine.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTimeOffset>("AddedOn")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("FilePath")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("addedOn")
-                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
