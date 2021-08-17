@@ -1,0 +1,24 @@
+body,
+html,
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url("../ assets/bg.svg");
+}
+
+
+.layout{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex:1;
+}
+
+footer > p {
+    text-align: center;
+    color: rgba(0, 0, 0, 0.4);
+}
