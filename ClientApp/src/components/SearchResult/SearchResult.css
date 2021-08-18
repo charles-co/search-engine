@@ -1,0 +1,15 @@
+.search-result
+{
+    display:flex;
+    flex-direction:row;
+    align-items: center;
+}
+
+.search-result-img{
+    max-width: 200px;
+    margin: 0 10px;
+}
+
+.search-result-img > img{
+    width: 100%;
+}
