@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/loader"
 import './Results.css'
-import SearchResult from "../../components/SearchResult/SearchResult";
+import { SearchResult } from "../../components/SearchResult/SearchResult";
 
 export class ResultPage extends Component {
     displayName = ResultPage.name
@@ -29,7 +29,11 @@ export class ResultPage extends Component {
                                 </div>
                             </div>
                             <div className="results-body">
-                                
+                                <SearchResult type="html" />
+                                <SearchResult type="json" />
+                                <SearchResult type="word" />
+                                <SearchResult type="xls" />
+                                <SearchResult type="json" />
                             </div>
                         </main>
                 }

@@ -1,11 +1,8 @@
-.results-page{
-   
-}
 
 .results-page-header {
     display: flex;
     flex-direction: column;
-    border-bottom: 1px solid #eeeeee;
+    border-bottom: 1.5px solid #eeeeee;
 }
 
 .logo{
@@ -31,6 +28,8 @@
     color: rgba(0, 0, 0, 0.5);
 }
 
-.results-body{
+.results-body {
     min-height: 80vh;
+    background-color: rgb(255, 255, 255);
+    padding: 0 20px;
 }
