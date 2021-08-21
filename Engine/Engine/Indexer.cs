@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using java.lang;
 using TikaOnDotNet.TextExtraction;
+using String = System.String;
 using StringBuilder = System.Text.StringBuilder;
 
 namespace Engine {
@@ -82,14 +83,14 @@ namespace Engine {
             string normalizedText = NormalizeWhiteSpaceAndRemovePunctuation(text.ToLower());
 
             string[] words = SplitAndRemoveStopWords(normalizedText);
-
+            
             StemWords(words);
-
+            
             int position = 0;
                 
             for (int i = 0; i < words.Length; i++) {
-                currentIndex.AddWord(words[i], 1, position);
-                position += (words[i].Length + 1);
+                currentIndex.AddWord(words[i], document.documentId, position);
+                position += (words[i].Length);
             }
             
             Console.WriteLine($"Done indexing document {document.documentId}");
