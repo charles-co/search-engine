@@ -1,32 +1,40 @@
-﻿using MongoDB.Bson;
+﻿using System;
+using System.Linq;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver;
 
 namespace Engine {
     public class Document {
-        public int documentId;
+        public long position;
+        public string documentId;
         public string url;
 
-        public Document(int documentId, string url) {
+        public Document(long position, string documentId, string url) {
+            this.position = position;
             this.documentId = documentId;
             this.url = url;
         }
-        
-        public static Document CreateDocument(string name, string url) {
-            MongoClient dbClient = new MongoClient("mongodb+srv://user:user@querydata.q0xxx.mongodb.net");
-            var database = dbClient.GetDatabase("404Db");
-            var collection = database.GetCollection<BsonDocument>("documents");
 
-            var document = new BsonDocument {
+        public static async void IndexDocument(string name, string url) {
+            Console.WriteLine($"Creating new document: {name}");
+            var collection = Connector.GetDocumentsCollection();
+            var documentIndex = await collection.CountDocumentsAsync(new BsonDocument());
+            
+            var bsonDocument = new BsonDocument {
                 { "name", name },
-                { "url", url }
+                { "url", url },
+                { "position", documentIndex }
             };
 
-            var createdDoc = collection.InsertOneAsync(document);
+            await collection.InsertOneAsync(bsonDocument);
+            
+            var getDocFilter = Builders<BsonDocument>.Filter.Eq("name", name);
+            var createdDoc = collection.Find(getDocFilter).ToList().Last();
 
-            var documentObj = new Document(createdDoc.Id, url);
-
-            return documentObj;
+            Console.WriteLine($"Document {name} saved to database");
+            
+            Indexer.TryIndex(new Document(documentIndex, createdDoc["_id"].ToString(), url));
         }
     }
 }

@@ -18,8 +18,6 @@ namespace Engine {
 
             return webPageContents.Text;
         }
-
-        public static Index currentIndex = new Index();
         
         private static string NormalizeWhiteSpaceAndRemovePunctuation(string text) {
             StringBuilder output = new StringBuilder();
@@ -73,10 +71,12 @@ namespace Engine {
             }
         }
 
-        private static void IndexDocument() {
+        private static async void IndexDocument() {
             Document document = toBeIndexed.Dequeue();
             
-            Console.WriteLine($"Indexing document {document.documentId}");
+            Index newIndex = new Index();
+            
+            Console.WriteLine($"Indexing document {document.position}");
                 
             string text = ExtractText(document.url).Trim();
 
@@ -86,14 +86,16 @@ namespace Engine {
             
             StemWords(words);
             
-            int position = 0;
+            int wordPosition = 0;
                 
             for (int i = 0; i < words.Length; i++) {
-                currentIndex.AddWord(words[i], document.documentId, position);
-                position += (words[i].Length);
+                newIndex.AddWord(words[i], document, wordPosition);
+                wordPosition += (words[i].Length);
             }
+
+            await newIndex.SaveToDb();
             
-            Console.WriteLine($"Done indexing document {document.documentId}");
+            Console.WriteLine($"Done indexing document {document.position}");
 
             if (toBeIndexed.Count > 0) {
                 IndexDocument();

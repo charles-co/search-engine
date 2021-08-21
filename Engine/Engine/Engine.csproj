@@ -228,6 +228,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Connector.cs" />
         <Compile Include="Document.cs" />
         <Compile Include="Index.cs" />
         <Compile Include="Indexer.cs" />
