@@ -19,50 +19,6 @@ namespace Engine {
             return webPageContents.Text;
         }
         
-        private static string NormalizeWhiteSpaceAndRemovePunctuation(string text) {
-            StringBuilder output = new StringBuilder();
-            bool skipped = false;
-
-            foreach (char c in text) {
-                if (char.IsWhiteSpace(c)) {
-                    if (!skipped) {
-                        output.Append(' ');
-                        skipped = true;
-                    }
-                }
-                else if (char.IsPunctuation(c)) {
-                    if (!skipped) {
-                        output.Append(' ');
-                        skipped = true;
-                    }
-                }
-                else {
-                    skipped = false;
-                    output.Append(c);
-                }
-            }
-
-            return output.ToString();
-        }
-
-        private static bool IsStopWord(string word) {
-            return StopWordsHash.Contains(word);
-        }
-
-        private static string [] SplitAndRemoveStopWords(string text) {
-            string[] words = text.Split(' ');
-
-            return words.Where(word => !IsStopWord(word)).ToArray();
-        }
-
-        private static void StemWords(string [] validWords) {
-            Stemmer stemmer = new Stemmer();
-
-            for (int i = 0; i < validWords.Length; i++) {
-                validWords[i] = stemmer.StemWord(validWords[i]);
-            }         
-        }
-
         public static void TryIndex(Document document) {
             toBeIndexed.Enqueue(document);
 
@@ -80,11 +36,7 @@ namespace Engine {
                 
             string text = ExtractText(document.url).Trim();
 
-            string normalizedText = NormalizeWhiteSpaceAndRemovePunctuation(text.ToLower());
-
-            string[] words = SplitAndRemoveStopWords(normalizedText);
-            
-            StemWords(words);
+            string[] words = Utils.CleanAndExtractWords(text);
             
             int wordPosition = 0;
                 
