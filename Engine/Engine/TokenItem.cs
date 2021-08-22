@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using MongoDB.Bson;
 
 namespace Engine {
@@ -10,6 +11,12 @@ namespace Engine {
         public long documentPosition;
         public TokenItem(int position, string documentId, long documentPosition) {
             positions.Add(position);
+            this.documentId = documentId;
+            this.documentPosition = documentPosition;
+        }
+        
+        public TokenItem(List<int> positions, string documentId, long documentPosition) {
+            positions.AddRange(positions);
             this.documentId = documentId;
             this.documentPosition = documentPosition;
         }

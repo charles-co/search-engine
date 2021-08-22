@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -14,6 +15,18 @@ namespace Engine {
 
         public Token(string word) {
             this.word = word;
+        }
+
+        public Token(string word, BsonValue[] initialDocuments, int frequency) {
+            this.word = word;
+            this.frequency = frequency;
+
+            foreach (var document in initialDocuments) {
+                List<int> documentPositions = BsonSerializer.Deserialize<List<int>>(document["positions"].ToJson());
+                TokenItem tokenItem = new TokenItem(documentPositions, document["fileId"].ToString(),
+                    document["fileIndex"].ToInt32());
+                documents.Add(tokenItem);
+            }
         }
 
         public void AddItem(Document document, int position) {
@@ -37,7 +50,6 @@ namespace Engine {
                     {"fileId", document.documentId},
                     {"fileIndex", document.documentPosition},
                     {"positions", document.GetBsonPositions()},
-                    {"frequency", frequency}
                 };
 
                 documentsArray.Add(item);
@@ -57,14 +69,15 @@ namespace Engine {
                 
                 var tokensCollection = Connector.GetTokensCollection();
 
-                var update = Builders<BsonDocument>.Update.Set("documents", newDocuments);
+                var update = Builders<BsonDocument>.Update.Set("documents", newDocuments).Set("frequency", prevTask["frequency"].ToInt32() + frequency);
 
                 await tokensCollection.UpdateOneAsync(getFilter, update);
             }
             else {
                 var token = new BsonDocument {
                     {"word", word},
-                    {"documents", GetBsonDocuments()}
+                    {"documents", GetBsonDocuments()},
+                    {"frequency", frequency}
                 };
 
                 var tokensCollection = Connector.GetTokensCollection();
