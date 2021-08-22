@@ -13,7 +13,7 @@ export class Home extends Component {
                    </div>
                    <p className="page-subtitle"> A custom search engine built with React & C# </p>
                    <form className="search-form">
-                       <input type="text" className="search-input" placeholder="Search for anything..." />
+                       <input type="text" className="search-input" placeholder="Search for anything..." required />
                        <input type="image" name="submit" className="search-submit-btn" border="0" alt="Submit" src={require("../../ assets/search.svg")} />
                    </form>
                </div>
