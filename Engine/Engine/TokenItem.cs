@@ -16,7 +16,7 @@ namespace Engine {
         }
         
         public TokenItem(List<int> positions, string documentId, long documentPosition) {
-            positions.AddRange(positions);
+            this.positions = positions;
             this.documentId = documentId;
             this.documentPosition = documentPosition;
         }

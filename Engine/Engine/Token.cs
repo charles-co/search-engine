@@ -9,7 +9,7 @@ using MongoDB.Driver;
 namespace Engine {
     public class Token {
         public string word;
-        private List<TokenItem> documents = new List<TokenItem>();
+        public List<TokenItem> documents = new List<TokenItem>();
         private string currentDocumentId;
         private int frequency = 0;
 

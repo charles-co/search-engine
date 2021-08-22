@@ -165,6 +165,10 @@
           <Private>True</Private>
         </Reference>
         <Reference Include="mscorlib" />
+        <Reference Include="PriorityQueue, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5e136dbf0437dacd">
+          <HintPath>..\packages\OptimizedPriorityQueue.5.1.0\lib\net45\PriorityQueue.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="SharpCompress, Version=0.23.0.0, Culture=neutral, PublicKeyToken=afb0a02973931d96">
           <HintPath>..\packages\SharpCompress.0.23.0\lib\net45\SharpCompress.dll</HintPath>
           <Private>True</Private>
@@ -238,6 +242,7 @@
         <Compile Include="Stemmer.cs" />
         <Compile Include="Token.cs" />
         <Compile Include="TokenItem.cs" />
+        <Compile Include="TokenPointer.cs" />
         <Compile Include="Utils.cs" />
     </ItemGroup>
     <ItemGroup>
