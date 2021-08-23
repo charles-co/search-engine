@@ -80,13 +80,9 @@ namespace Engine {
                 };
 
                 var tokensCollection = Connector.GetTokensCollection();
-
-                Console.WriteLine($"Saving token {word}");
-
+                
                 await tokensCollection.InsertOneAsync(token);
             }
-
-            Console.WriteLine($"Saved token {word}");
         }
     }
 }
