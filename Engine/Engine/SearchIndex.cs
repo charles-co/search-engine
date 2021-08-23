@@ -15,12 +15,6 @@ namespace Engine {
                 var frequency = token["frequency"].ToInt32();
                 tokens[word] = new Token(word, documents, frequency);
             }
-            
-            // Console.WriteLine(tokens);
-            // Console.WriteLine(tokens.Count);
-            
-            // Console.WriteLine($"Tokens: {dbTokens.ToList()}");
-            // Console.WriteLine($"Tokens: {dbTokens.ToList()[1]}");
         }
     }
 }
