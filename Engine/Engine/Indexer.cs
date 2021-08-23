@@ -38,11 +38,8 @@ namespace Engine {
 
             string[] words = Utils.CleanAndExtractWords(text);
             
-            int wordPosition = 0;
-                
             for (int i = 0; i < words.Length; i++) {
-                newIndex.AddWord(words[i], document, wordPosition);
-                wordPosition += (words[i].Length);
+                newIndex.AddWord(words[i], document, i);
             }
 
             await newIndex.SaveToDb();
