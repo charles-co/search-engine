@@ -11,7 +11,7 @@ namespace Engine {
         public string word;
         public List<TokenItem> documents = new List<TokenItem>();
         private string currentDocumentId;
-        private int frequency = 0;
+        public int frequency = 0;
 
         public Token(string word) {
             this.word = word;
@@ -30,13 +30,12 @@ namespace Engine {
         }
 
         public void AddItem(Document document, int position) {
-            frequency++;
-
             if (currentDocumentId == document.documentId) {
                 TokenItem currentDocument = documents[documents.Count - 1];
                 currentDocument.AddPosition(position);
             }
             else {
+                frequency++;
                 currentDocumentId = document.documentId;
                 TokenItem newDocument = new TokenItem(position, document.documentId, document.position);
                 documents.Add(newDocument);
