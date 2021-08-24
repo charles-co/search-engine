@@ -1,6 +1,9 @@
-.landing-page{
+.landing-page {
     padding: 20px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .page-header{
@@ -16,14 +19,15 @@
     max-width: 600px;
 }
 
-.logo-img{
-    width:100%;
+.logo-homepage {
+    max-width: unset;
+    width: 100%;
 }
 
 .page-subtitle {
     margin: 20px 30px 30px 30px;
     text-align: center;
-    color: rgba(0, 0, 0, 0.4);
+    color: rgba(0, 0, 0, 0.7);
     font-size: 20px;
 }
 
@@ -34,31 +38,33 @@
     border: 2px solid #003CB0;
     border-radius: 30px;
     padding: 7px 10px;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.8);
     max-width: 570px;
+    transition: 0.3s;
 }
+
+
 
 .search-input{
     border:none;
     padding: 2px;
     width: 100%;
     font-size: 18px;
+    background: none;
 }
 
 .search-input:focus{
     outline:0.1px dotted #808080;
 }
 
+
+
 .search-submit-btn {
     background: none;
     border: none;
     border-left: 1px solid #003CB0;
-    padding: 6px 0;
-}
-
-.search-submit-btn-img{
-    min-width: 30px;
-    margin-left: 5px;
+    padding: 6px 5px;
+    min-width: 40px;
 }
 
 .supported-content {
@@ -70,6 +76,7 @@
 
 .supported-content > h3{
     font-size: 18px;
+    color: #000;
 }
 
 .supported-items{
@@ -80,7 +87,7 @@
 .supported-item{
     margin: 10px;
     padding:5px;
-    max-width: 50px;
+    max-width: 40px;
 }
 
 .supported-item > img{

@@ -8,34 +8,32 @@ export class Home extends Component {
        return (
            <div className="landing-page">
                <div className="page-header">
-                   <div className="logo">
-                       <img src={require("../../ assets/logotest.svg")} className="logo-img" alt="Team logo" />
+                   <div className="logo-homepage">
+                       <img src={require("../../ assets/logo.svg")} className="logo-img" alt="Team logo" />
                    </div>
                    <p className="page-subtitle"> A custom search engine built with React & C# </p>
-                   <div className="search-form">
-                       <input type="text" className="search-input" placeholder="Search for anything..." />
-                       <button className="search-submit-btn">
-                           <img className="search-submit-btn-img" src={require("../../ assets/search.svg")} alt="search icon" />
-                       </button>
-                   </div>
+                   <form className="search-form">
+                       <input type="text" className="search-input" placeholder="Search for anything..." required />
+                       <input type="image" name="submit" className="search-submit-btn" border="0" alt="Submit" src={require("../../ assets/search.svg")} />
+                   </form>
                </div>
                <div className="supported-content">
                    <h3>This search engine allows you search for </h3>
                    <div className="supported-items">
                        <div className="supported-item">
-                           <img src={require("../../ assets/txt.svg")} className="supported-item-img"/>
+                           <img src={require("../../ assets/coloured/excel.svg")} className="supported-item-img" alt="excel" />
                        </div>
                        <div className="supported-item">
-                           <img src={require("../../ assets/excel.svg")} className="supported-item-img" />
+                           <img src={require("../../ assets/coloured/html.svg")} className="supported-item-img" alt="txt" />
                        </div>
                        <div className="supported-item">
-                           <img src={require("../../ assets/powerpoint.svg")} className="supported-item-img" />
+                           <img src={require("../../ assets/coloured/pdf.svg")} className="supported-item-img" alt="powerpoint" />
                        </div>
                        <div className="supported-item">
-                           <img src={require("../../ assets/word.svg")} className="supported-item-img" />
+                           <img src={require("../../ assets/coloured/word.svg")} className="supported-item-img" alt="word" />
                        </div>
                        <div className="supported-item">
-                           <img src={require("../../ assets/json.svg")} className="supported-item-img" />
+                           <img src={require("../../ assets/coloured/json.svg")} className="supported-item-img" alt="json" />
                        </div>
                    </div>
                    <p>and more</p>
