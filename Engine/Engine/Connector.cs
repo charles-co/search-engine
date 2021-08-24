@@ -4,7 +4,10 @@ using MongoDB.Driver;
 namespace Engine {
     public class Connector {
         private static MongoClient Client;
-        
+
+        public static void GenerateDb() {
+            Client = new MongoClient("mongodb+srv://user:user@querydata.q0xxx.mongodb.net");
+        }
         private static IMongoDatabase GetDb() {
             if (Client == null) {
                 Client = new MongoClient("mongodb+srv://user:user@querydata.q0xxx.mongodb.net");

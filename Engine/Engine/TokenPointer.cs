@@ -2,7 +2,7 @@
 using Priority_Queue;
 
 namespace Engine {
-    public class TokenPointer : FastPriorityQueueNode {
+    public class TokenPointer : StablePriorityQueueNode {
         public List<TokenItem> targets;
         public Token token;
         public int index = 0;
