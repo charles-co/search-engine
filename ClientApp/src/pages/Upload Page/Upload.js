@@ -25,21 +25,21 @@ export class UploadPage extends Component {
                 <div className="upload-page-main">
                     <form>
                         <div className="upload-form-input">
-                            <label for="">Title:</label>
+                            <label htmlFor="">Title:</label>
                             <input type="text" name="title" id="document-title" required />
                         </div>
                         <div className="upload-form-input">
-                            <label for="">Description:</label>
+                            <label htmlFor="">Description:</label>
                             <textarea name="description" id="document-desc"></textarea>
                         </div>
                         <div className="upload-form-input">
-                            <label for="document">Choose a file to upload</label>
+                            <label htmlFor="document">Choose a file to upload</label>
                             <input type="file" name="document" id="document" required/>
                         </div>
                         <input type="submit" value="Upload" className="submit-btn"/>
                     </form>
                     <p className="notice">
-                        This information will be available on the search engine about 2 hours after upload
+                        N.B: This information will be available on the search engine about 2 hours after upload
                     </p>
                 </div>
             </div>

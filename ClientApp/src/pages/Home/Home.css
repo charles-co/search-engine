@@ -27,7 +27,7 @@
 .page-subtitle {
     margin: 20px 30px 30px 30px;
     text-align: center;
-    color: rgba(0, 0, 0, 0.4);
+    color: rgba(0, 0, 0, 0.7);
     font-size: 20px;
 }
 
@@ -38,20 +38,26 @@
     border: 2px solid #003CB0;
     border-radius: 30px;
     padding: 7px 10px;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.8);
     max-width: 570px;
+    transition: 0.3s;
 }
+
+
 
 .search-input{
     border:none;
     padding: 2px;
     width: 100%;
     font-size: 18px;
+    background: none;
 }
 
 .search-input:focus{
     outline:0.1px dotted #808080;
 }
+
+
 
 .search-submit-btn {
     background: none;
@@ -70,6 +76,7 @@
 
 .supported-content > h3{
     font-size: 18px;
+    color: #000;
 }
 
 .supported-items{

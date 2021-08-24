@@ -21,19 +21,19 @@ export class Home extends Component {
                    <h3>This search engine allows you search for </h3>
                    <div className="supported-items">
                        <div className="supported-item">
-                           <img src={require("../../ assets/txt.svg")} className="supported-item-img" alt="txt" />
+                           <img src={require("../../ assets/coloured/excel.svg")} className="supported-item-img" alt="excel" />
                        </div>
                        <div className="supported-item">
-                           <img src={require("../../ assets/excel.svg")} className="supported-item-img" alt="excel" />
+                           <img src={require("../../ assets/coloured/html.svg")} className="supported-item-img" alt="txt" />
                        </div>
                        <div className="supported-item">
-                           <img src={require("../../ assets/powerpoint.svg")} className="supported-item-img" alt="powerpoint" />
+                           <img src={require("../../ assets/coloured/pdf.svg")} className="supported-item-img" alt="powerpoint" />
                        </div>
                        <div className="supported-item">
-                           <img src={require("../../ assets/word.svg")} className="supported-item-img" alt="word" />
+                           <img src={require("../../ assets/coloured/word.svg")} className="supported-item-img" alt="word" />
                        </div>
                        <div className="supported-item">
-                           <img src={require("../../ assets/json.svg")} className="supported-item-img" alt="json" />
+                           <img src={require("../../ assets/coloured/json.svg")} className="supported-item-img" alt="json" />
                        </div>
                    </div>
                    <p>and more</p>
