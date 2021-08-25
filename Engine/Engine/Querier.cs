@@ -3,42 +3,96 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using java.util;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Driver;
 using Priority_Queue;
 
 namespace Engine {
     public class Querier {
         private StablePriorityQueue<TokenPointer> _queue;
-        private StablePriorityQueue<ResultDocument> _scores;
-        private long documentsCount;
-
-        public async void Search(string query) {
+        private SimplePriorityQueue<ScoreDocumentNode> _scores;
+        private long _documentsCount;
+        private BaseDocument [] _resultDocuments;
+        private List<TokenPointer> arrangedPointers = new List<TokenPointer>(); //TODO: This is to correct consecutive
+        
+        public async Task<BaseDocument []> Search(string query) {
             var cleanedWords = Utils.CleanAndExtractWords(query);
             
-            documentsCount = await Connector.GetDocumentsCollection().CountDocumentsAsync(new BsonDocument());
-
+            DateTime start = DateTime.Now;
             Index searchIndex = new SearchIndex(cleanedWords);
-            
-            GeneratePointers(searchIndex, cleanedWords);
-            LinearMap();
+            Console.WriteLine($"Load words {(DateTime.Now - start).TotalMilliseconds}");
+
+            if (searchIndex.tokens.Count != 0) {
+                _documentsCount = await Connector.GetDocumentsCollection().CountDocumentsAsync(new BsonDocument());
+                start = DateTime.Now;
+                GeneratePointers(searchIndex, cleanedWords);
+                LinearMap();
+                Console.WriteLine($"Generate scores {(DateTime.Now - start).TotalMilliseconds}");
+                start = DateTime.Now;
+                await FetchDocumentDetails();
+                Console.WriteLine($"Fetch documents {(DateTime.Now - start).TotalMilliseconds}");
+
+                return _resultDocuments;
+            }
+
+            _resultDocuments = new BaseDocument[0];
+            return _resultDocuments;
         }
-        
+
+        private async Task FetchDocumentDetails() {
+            string[] resultIds = new string[_scores.Count];
+            _resultDocuments = new BaseDocument[_scores.Count];
+            
+            List<FilterDefinition<BsonDocument>> filtersList = new List<FilterDefinition<BsonDocument>>();
+            
+            while (_scores.Count > 0) {
+                var currentDoc = _scores.Dequeue();
+                resultIds[_scores.Count] = currentDoc.DocumentId;
+                _resultDocuments[_scores.Count] = new BaseDocument(currentDoc.DocumentId);
+                
+                var getFilter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(currentDoc.DocumentId));
+                filtersList.Add(getFilter);
+            }
+
+            var filter = Builders<BsonDocument>.Filter.Or(filtersList);
+            var documents = await Connector.GetDocumentsCollection().FindAsync(filter);
+            var bson = documents.ToList();
+
+            Dictionary<string, BsonDocument> docIdToValueMapping = new Dictionary<string, BsonDocument>();
+
+            foreach (var doc in bson) {
+                var currentId = doc["_id"].ToString();
+                docIdToValueMapping[currentId] = doc;
+            }
+
+            for (int i = 0; i < resultIds.Length; i++) {
+                var id = resultIds[i];
+                var values = docIdToValueMapping[id];
+                _resultDocuments[i].name = values["name"].ToString();
+                _resultDocuments[i].url = values["url"].ToString();
+            }
+        }
+
         private void GeneratePointers(Index targetIndex, string [] words) {
             _queue = new StablePriorityQueue<TokenPointer>(words.Length);
-            _scores = new StablePriorityQueue<ResultDocument>(words.Length);
+            _scores = new SimplePriorityQueue<ScoreDocumentNode>();
             
             foreach (var word in words) {
                 if (targetIndex.tokens.ContainsKey(word)) {
                     var pointer = new TokenPointer(targetIndex.tokens[word]);
-                    _queue.Enqueue(pointer, pointer.target.documentPosition);   
+                    _queue.Enqueue(pointer, pointer.target.documentPosition);
+                    arrangedPointers.Add(pointer);
+                }
+                else {
+                    arrangedPointers.Add(new TokenPointer());
                 }
             }
         }
 
         private void LinearMap() {
-            List<TokenPointer> smallestPointers = ExtractSmallest(_queue);
-            
+            List<TokenPointer> smallestPointers = ExtractSmallest();
             ScorePointers(smallestPointers);
-                
             foreach (var pointer in smallestPointers) {
                 if (pointer.moveForward()) {
                     _queue.Enqueue(pointer, pointer.target.documentPosition);
@@ -58,18 +112,17 @@ namespace Engine {
                 double termFrequency = target.positions.Count;
                 double documentsWithTerm = tokenPointer.token.frequency;
 
-                double tfIdf = termFrequency * Math.Log(documentsCount / documentsWithTerm, 2);
+                double tfIdf = termFrequency * Math.Log(_documentsCount / documentsWithTerm, 2);
                 
                 documentScore += tfIdf;
             }
             
-            double d = ScoreConsecutiveWords(pointers);
+            // double d = ScoreConsecutiveWords(pointers);
 
-            documentScore += d;
+            // documentScore += d;
             
             string targetDocumentId = pointers[0].target.documentId;
-            Console.WriteLine($"{d} ${targetDocumentId}");
-            _scores.Enqueue(new ResultDocument(targetDocumentId, (float) documentScore), (float) documentScore);
+            _scores.Enqueue(new ScoreDocumentNode(targetDocumentId), (float) documentScore);
         }
 
         private double ScoreConsecutiveWords(List<TokenPointer> pointers) {
@@ -159,35 +212,25 @@ namespace Engine {
             return consecutiveCount;
         }
 
-        private List<TokenPointer> ExtractSmallest(StablePriorityQueue<TokenPointer> pointers) {
+        private List<TokenPointer> ExtractSmallest() {
             var smallestPointers = new List<TokenPointer>();
 
             while (true) {
-                smallestPointers.Add(pointers.Dequeue());
+                smallestPointers.Add(_queue.Dequeue());
 
-                if (pointers.Count == 0) {
+                if (_queue.Count == 0) {
                     break;
                 }
 
                 var leastPointer = smallestPointers[0];
-                var leastPointerInQueue = pointers.First;
+                var leastPointerInQueue = _queue.First;
 
                 if (leastPointer.target.documentPosition != leastPointerInQueue.target.documentPosition) {
                     break;
                 }
             }
-
+            
             return smallestPointers;
-        }
-    }
-
-    class ResultDocument : StablePriorityQueueNode {
-        public string documentId;
-        public float score;
-
-        public ResultDocument(string documentId, float score) {
-            this.documentId = documentId;
-            this.score = score;
         }
     }
 }
