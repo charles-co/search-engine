@@ -29,15 +29,15 @@ namespace Engine {
             }
         }
 
-        public void AddItem(Document document, int position) {
-            if (currentDocumentId == document.documentId) {
+        public void AddItem(DbDocument dbDocument, int position) {
+            if (currentDocumentId == dbDocument.documentId) {
                 TokenItem currentDocument = documents[documents.Count - 1];
                 currentDocument.AddPosition(position);
             }
             else {
                 frequency++;
-                currentDocumentId = document.documentId;
-                TokenItem newDocument = new TokenItem(position, document.documentId, document.position);
+                currentDocumentId = dbDocument.documentId;
+                TokenItem newDocument = new TokenItem(position, dbDocument.documentId, dbDocument.position);
                 documents.Add(newDocument);
             }
         }
@@ -59,16 +59,16 @@ namespace Engine {
         
         public async Task SaveSelfToDb() {
             var getFilter = Builders<BsonDocument>.Filter.Eq("word", word);
-            var prevTask = Connector.GetTokensCollection().Find(getFilter).FirstOrDefault();
+            var prevToken = Connector.GetTokensCollection().Find(getFilter).FirstOrDefault();
 
-            if (prevTask != null) {
-                var taskBson = prevTask.ToBsonDocument();
+            if (prevToken != null) {
+                var taskBson = prevToken.ToBsonDocument();
                 var previousDocuments = BsonSerializer.Deserialize<BsonArray>(taskBson["documents"].ToJson());
                 var newDocuments = previousDocuments.AddRange(GetBsonDocuments());
                 
                 var tokensCollection = Connector.GetTokensCollection();
 
-                var update = Builders<BsonDocument>.Update.Set("documents", newDocuments).Set("frequency", prevTask["frequency"].ToInt32() + frequency);
+                var update = Builders<BsonDocument>.Update.Set("documents", newDocuments).Set("frequency", prevToken["frequency"].ToInt32() + frequency);
 
                 await tokensCollection.UpdateOneAsync(getFilter, update);
             }

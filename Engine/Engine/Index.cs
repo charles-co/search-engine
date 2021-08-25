@@ -5,7 +5,7 @@ namespace Engine {
     public class Index {
         public Dictionary<string, Token> tokens = new Dictionary<string, Token>();
 
-        public void AddWord(string word, Document document, int position) {
+        public void AddWord(string word, DbDocument dbDocument, int position) {
             Token wordItem;
             if (tokens.ContainsKey(word)) {
                 wordItem = tokens[word];
@@ -15,7 +15,7 @@ namespace Engine {
                 tokens[word] = wordItem;
             }
 
-            wordItem.AddItem(document, position);
+            wordItem.AddItem(dbDocument, position);
         }
 
         public async Task SaveToDb() {
