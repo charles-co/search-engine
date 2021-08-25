@@ -5,12 +5,16 @@ namespace Engine {
     public class Connector {
         private static MongoClient Client;
 
+        private static string mongoURL =
+            // "mongodb+srv://dbuser:crypticpassword@findr.wwrf5.mongodb.net/404Db?retryWrites=true&w=majority";
+            "mongodb://127.0.0.1:27017/404Db?retryWrites=true&w=majority";
+        
         public static void GenerateDb() {
-            Client = new MongoClient("mongodb+srv://user:user@querydata.q0xxx.mongodb.net");
+            Client = new MongoClient(mongoURL);
         }
         private static IMongoDatabase GetDb() {
             if (Client == null) {
-                Client = new MongoClient("mongodb+srv://user:user@querydata.q0xxx.mongodb.net");
+                Client = new MongoClient(mongoURL);
             }
 
             return Client.GetDatabase("404Db");
