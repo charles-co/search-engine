@@ -467,6 +467,7 @@
             <DependentUpon>Global.asax</DependentUpon>
         </Compile>
         <Compile Include="Models\Document.cs" />
+        <Compile Include="Models\Query.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Startup.cs" />
     </ItemGroup>
