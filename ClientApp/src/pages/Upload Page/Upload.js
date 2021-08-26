@@ -7,7 +7,46 @@ export class UploadPage extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { loadingState: false };
+        this.state = { loadingState: false, title: "", description: "", url: "", document: "" };
+    }
+
+    handleInputChange = (e) => {
+        const { name, value } = e.target;
+        this.setState({
+            [name]: value
+        })
+    }
+
+    handleFileUpload = () => {
+        const uploadLink = "https://api.cloudinary.com/v1_1/dpgdjfckl/upload";
+        const data = new FormData();
+        data.append("file", this.state.document)
+        data.append("upload_preset", "search-engine")
+
+
+        fetch(uploadLink, {
+            method: "POST",
+            body: data
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    response.json()
+                } else {
+                    throw new Error("Something went wrong");
+                }
+                
+            })
+            .then(data => this.setState({ url: data.url }))
+            .catch(error => console.log(error.message))
+    }
+
+    handleSubmit = () => {
+        this.handleFileUpload();
+
+        if (this.state.url !== "") {
+            const formData = { name: this.state.title, url: this.state.url, description: this.state.description };
+
+        }
     }
 
     render() {
@@ -23,18 +62,18 @@ export class UploadPage extends Component {
                     </div>
                 </div>
                 <div className="upload-page-main">
-                    <form>
+                    <form onSubmit={this.handleSubmit}>
                         <div className="upload-form-input">
-                            <label htmlFor="">Title:</label>
-                            <input type="text" name="title" id="document-title" required />
+                            <label htmlFor="title">Title:</label>
+                            <input type="text" name="title" id="document-title" required onChange={this.handleInputChange} />
                         </div>
                         <div className="upload-form-input">
-                            <label htmlFor="">Description:</label>
-                            <textarea name="description" id="document-desc"></textarea>
+                            <label htmlFor="description">Description:</label>
+                            <textarea name="description" id="document-desc" onChange={this.handleInputChange}></textarea>
                         </div>
                         <div className="upload-form-input">
                             <label htmlFor="document">Choose a file to upload</label>
-                            <input type="file" name="document" id="document" required/>
+                            <input type="file" name="document" id="document" required onChange={this.handleInputChange} />
                         </div>
                         <input type="submit" value="Upload" className="submit-btn"/>
                     </form>

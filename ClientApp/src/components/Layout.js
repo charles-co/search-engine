@@ -18,8 +18,8 @@ export class Layout extends Component {
                   </Row>
                   <footer>
                       <div className="links">
-                          <a href="https://github.com/charles-co/search-engine" className="github-link">Github</a>
                           <a href="" className="doc-link">Documentation</a>
+                          <a href="https://github.com/charles-co/search-engine" className="github-link">Github</a>
                       </div>
                       <p>C# group project 2019/2020</p>
                   </footer>
