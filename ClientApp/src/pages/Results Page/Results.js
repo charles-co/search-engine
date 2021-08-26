@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Loader from "../../components/Loader/loader"
 import './Results.css'
 import { SearchResult } from "../../components/SearchResult/SearchResult";
+import { Search } from "../../components/Search/Search";
 
 export class ResultPage extends Component {
     displayName = ResultPage.name
@@ -19,9 +20,13 @@ export class ResultPage extends Component {
                     this.state.loadingState === true ? <Loader /> :
                         <main>
                             <div className="results-page-header">
-                                <Link to="/" className="logo">
-                                    <img src={require("../../ assets/logo.svg")} alt="Team logo" />
-                                </Link>
+                                <div className="top-nav">
+                                    <Link to="/" className="logo">
+                                        <img src={require("../../ assets/logo.svg")} alt="Team logo" />
+                                    </Link>
+                                    <Search/>
+                                </div>
+                                
                                 <div className="result-info">
                                     <h2>Search results for ""</h2>
                                     <h5 className="matches-found">20 match(es) found</h5>

@@ -5,7 +5,14 @@
     border-bottom: 1.5px solid #eeeeee;
 }
 
-.logo{
+.top-nav{
+    display: flex;
+    flex-direction:row;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.logo {
     max-width: 220px;
     margin: 10px;
     align-self: flex-start;
