@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import { Link } from "react-router-dom"
+import { Notify } from "../../components/Toast Notification/Notify";
 import "./Upload.css"
 
 export class UploadPage extends Component {
@@ -7,8 +8,17 @@ export class UploadPage extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { loadingState: false, title: "", description: "", url: "", document: "" };
+        this.state = {
+            loadingState: false,
+            title: "",
+            description: "",
+            url: "",
+            document: "",
+            notificationType: "",
+            notificationMsg:""
+        };
     }
+
 
     handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -50,6 +60,7 @@ export class UploadPage extends Component {
     }
 
     render() {
+        
         return (
             <div className="upload-page">
                 <div className="upload-page-header">
@@ -81,6 +92,7 @@ export class UploadPage extends Component {
                         N.B: This information will be available on the search engine about 2 hours after upload
                     </p>
                 </div>
+                < Notify type={this.state.notificationType} message={this.state.notificationMsg} />
             </div>
             )
     }
