@@ -27,7 +27,7 @@ namespace API.Controllers
         // POST: api/index/
         [Route("api/index/")]
         [HttpPost]
-        public async Task<IHttpActionResult> Index(Document[] data)
+        public IHttpActionResult Index(Document[] data)
         {
             if (ModelState.IsValid)
             {
