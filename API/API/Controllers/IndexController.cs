@@ -8,7 +8,6 @@ using System.Web.Http;
 using System.Web.Http.ModelBinding;
 using System.Web.Http.Results;
 using System.Web.Http.ValueProviders;
-using API.Core;
 using API.Models;
 using Hangfire;
 
@@ -33,7 +32,7 @@ namespace API.Controllers
             if (ModelState.IsValid)
             {
                 foreach (var document in data) {
-                    _client.Enqueue(() => Engine.Document.IndexDocument(document.Name, document.Url));
+                    _client.Enqueue(() => Engine.DbDocument.IndexDocument(document.Name, document.Url));
                 }
                 
                 return new ResponseMessageResult(Request.CreateResponse(HttpStatusCode.Accepted, "document queued for indexing"));

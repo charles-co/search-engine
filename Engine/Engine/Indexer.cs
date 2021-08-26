@@ -9,7 +9,7 @@ using StringBuilder = System.Text.StringBuilder;
 
 namespace Engine {
     public class Indexer {
-        private static Queue<Document> toBeIndexed = new Queue<Document>();
+        private static Queue<DbDocument> toBeIndexed = new Queue<DbDocument>();
         
         private static Semaphore _indexDoc = new Semaphore(1, 1);
 
@@ -21,30 +21,30 @@ namespace Engine {
             return webPageContents.Text;
         }
         
-        public static void TryIndex(Document document) {
-            toBeIndexed.Enqueue(document);
+        public static void TryIndex(DbDocument dbDocument) {
+            toBeIndexed.Enqueue(dbDocument);
             IndexDocument();
         }
 
         private static async void IndexDocument() {
             _indexDoc.WaitOne();
-            Document document = toBeIndexed.Dequeue();
+            DbDocument dbDocument = toBeIndexed.Dequeue();
             
             Index newIndex = new Index();
             
-            Console.WriteLine($"Indexing document {document.position}");
+            Console.WriteLine($"Indexing document {dbDocument.position}");
                 
-            string text = ExtractText(document.url).Trim();
+            string text = ExtractText(dbDocument.url).Trim();
 
             string[] words = Utils.CleanAndExtractWords(text);
             
             for (int i = 0; i < words.Length; i++) {
-                newIndex.AddWord(words[i], document, i);
+                newIndex.AddWord(words[i], dbDocument, i);
             }
 
             await newIndex.SaveToDb();
             
-            Console.WriteLine($"Done indexing document {document.position}");
+            Console.WriteLine($"Done indexing document {dbDocument.position}");
 
             _indexDoc.Release();
         }

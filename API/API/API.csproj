@@ -462,11 +462,12 @@
         <Compile Include="App_Start\UnityConfig.cs" />
         <Compile Include="App_Start\WebApiConfig.cs" />
         <Compile Include="Controllers\IndexController.cs" />
-        <Compile Include="Core\IndexingService.cs" />
+        <Compile Include="Controllers\QueryController.cs" />
         <Compile Include="Global.asax.cs">
             <DependentUpon>Global.asax</DependentUpon>
         </Compile>
         <Compile Include="Models\Document.cs" />
+        <Compile Include="Models\Query.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Startup.cs" />
     </ItemGroup>
