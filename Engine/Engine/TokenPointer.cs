@@ -6,7 +6,8 @@ namespace Engine {
         public List<TokenItem> targets;
         public Token token;
         public int index = 0;
-
+        public bool emptyPointer = false;
+        
         public TokenItem target {
             get {
                 if (index < targets.Count) {
@@ -15,6 +16,10 @@ namespace Engine {
 
                 return null;
             }
+        }
+
+        public TokenPointer() {
+            emptyPointer = true;
         }
 
         public TokenPointer(Token targetToken) {

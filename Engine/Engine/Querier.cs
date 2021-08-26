@@ -17,23 +17,29 @@ namespace Engine {
         private List<TokenPointer> arrangedPointers = new List<TokenPointer>(); //TODO: This is to correct consecutive
         
         public async Task<BaseDocument []> Search(string query) {
-            var cleanedWords = Utils.CleanAndExtractWords(query);
-            
-            DateTime start = DateTime.Now;
-            Index searchIndex = new SearchIndex(cleanedWords);
-            Console.WriteLine($"Load words {(DateTime.Now - start).TotalMilliseconds}");
+            try {
+                var cleanedWords = Utils.CleanAndExtractWords(query);
 
-            if (searchIndex.tokens.Count != 0) {
-                _documentsCount = await Connector.GetDocumentsCollection().CountDocumentsAsync(new BsonDocument());
-                start = DateTime.Now;
-                GeneratePointers(searchIndex, cleanedWords);
-                LinearMap();
-                Console.WriteLine($"Generate scores {(DateTime.Now - start).TotalMilliseconds}");
-                start = DateTime.Now;
-                await FetchDocumentDetails();
-                Console.WriteLine($"Fetch documents {(DateTime.Now - start).TotalMilliseconds}");
+                DateTime start = DateTime.Now;
+                Index searchIndex = new SearchIndex(cleanedWords);
+                Console.WriteLine($"Load words {(DateTime.Now - start).TotalMilliseconds}");
+                
+                if (searchIndex.tokens.Count != 0) {
+                    _documentsCount = await Connector.GetDocumentsCollection().CountDocumentsAsync(new BsonDocument());
+                    start = DateTime.Now;
+                    GeneratePointers(searchIndex, cleanedWords);
+                    LinearMap();
+                    Console.WriteLine($"Generate scores {(DateTime.Now - start).TotalMilliseconds}");
+                    start = DateTime.Now;
+                    await FetchDocumentDetails();
+                    Console.WriteLine($"Fetch documents {(DateTime.Now - start).TotalMilliseconds}");
 
-                return _resultDocuments;
+                    return _resultDocuments;
+                }
+
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.StackTrace, e.Message);
             }
 
             _resultDocuments = new BaseDocument[0];
@@ -116,25 +122,30 @@ namespace Engine {
                 
                 documentScore += tfIdf;
             }
-            
-            // double d = ScoreConsecutiveWords(pointers);
 
-            // documentScore += d;
+            double d = ScoreConsecutiveWords(pointers[0].target.documentId);
+
+            documentScore += d;
             
             string targetDocumentId = pointers[0].target.documentId;
             _scores.Enqueue(new ScoreDocumentNode(targetDocumentId), (float) documentScore);
         }
 
-        private double ScoreConsecutiveWords(List<TokenPointer> pointers) {
+        private double ScoreConsecutiveWords(string targetDocumentId) {
             //Total consecutive count
             int consecutiveCount = 0;
             List<PositionPointer> positionPointers = new List<PositionPointer>();
-
-            foreach (var pointer in pointers) {
-                //Add position arrays to pointers array
-                positionPointers.Add(new PositionPointer(pointer.target.positions));
-            }
             
+            foreach (var pointer in arrangedPointers) {
+                if (pointer.emptyPointer) {
+                    positionPointers.Add(new PositionPointer());   
+                }
+                else {
+                    //Add position arrays to pointers array
+                    positionPointers.Add(new PositionPointer(pointer.target.positions, pointer.target.documentId == targetDocumentId));   
+                }
+            }
+
             while (true) {
                 bool hasInvalidPointer = false;
                 int currentRunOn = 0;
@@ -146,6 +157,19 @@ namespace Engine {
                 for (int i = 0; i < positionPointers.Count; i++) {
                     var positionPointer = positionPointers[i];
 
+                    if (positionPointer.emptyPointer || !positionPointer.isValid) {
+                        if (currentRunOn > 1) {
+                            consecutiveCount += currentRunOn;
+                            currentRunOn = 1;
+                        }
+                        
+                        if(!hasSetFirstBreakPoint) {
+                            firstBreakPoint = Math.Max(i - 1, 0);
+                            hasSetFirstBreakPoint = true;
+                        }
+                        continue;
+                    }
+                    
                     //If we have invalid just break out of loop to save resources
                     if (positionPointer.currentPosition == -1) {
                         hasInvalidPointer = positionPointer.currentPosition == -1;
@@ -201,7 +225,9 @@ namespace Engine {
 
                 for (int i = 0; i <= firstBreakPoint; i++) {
                     var positionPointer = positionPointers[i];
-                    positionPointer.moveForward();
+                    if (!positionPointer.emptyPointer && positionPointer.isValid) {
+                        positionPointer.moveForward();
+                    }
                 }
 
                 if (hasInvalidPointer) {
