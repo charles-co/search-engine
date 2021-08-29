@@ -21,12 +21,12 @@
         <TextBlock HorizontalAlignment="Center" Height="60" Margin="178,8,246,0" TextWrapping="Wrap" Text="A custom search engine built with C# and Windows Presentation Foundation (WPF)." VerticalAlignment="Top" Width="356" Foreground="White" TextAlignment="Center" Padding="10" Grid.Row="1"/>
         <TextBlock HorizontalAlignment="Center" Height="72" Margin="139,0,252,0" TextWrapping="Wrap" Text="This search engine allows a user search for different file formats like " VerticalAlignment="Top" Width="389" Foreground="White" FontSize="16" TextAlignment="Center" Padding="10" Grid.Row="2" Grid.RowSpan="2"/>
         <StackPanel Orientation="Horizontal" x:Name="FileFormats" Margin="177,5,209,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3">
-            <Image Source="/Images/excel.png" Width="60" Height="60"/>
-            <Image Source="/Images/html.png" Width="60" Height="60"/>
-            <Image Source="/Images/json.png" Width="60" Height="60"/>
-            <Image Source="/Images/pdf.png" Width="60" Height="60"/>
-            <Image Source="/Images/powerpoint.png" Width="60" Height="60"/>
-            <Image Source="/Images/word.png" Width="60" Height="60"/>
+            <Image Source="/Images/excel.png" Width="50" Height="50"/>
+            <Image Source="/Images/html.png" Width="50" Height="50"/>
+            <Image Source="/Images/json.png" Width="50" Height="50"/>
+            <Image Source="/Images/pdf.png" Width="50" Height="50"/>
+            <Image Source="/Images/powerpoint.png" Width="50" Height="50"/>
+            <Image Source="/Images/word.png" Width="50" Height="50"/>
         </StackPanel>
         <TextBlock x:Name="more" HorizontalAlignment="Center" Height="25" Margin="330,10,370,0" TextWrapping="Wrap" Text="and more" VerticalAlignment="Top" Width="80" Foreground="White" Grid.Row="4" FontSize="16"/>
         <TextBlock x:Name="Team_names" HorizontalAlignment="Center" Height="16" Margin="198,63,252,0" TextWrapping="Wrap" Text="Built by Charles Oraebgu, Nifemi Adeyemi &amp; Chisom Onwuka" VerticalAlignment="Top" Width="330" Foreground="White" Grid.Row="4"/>
