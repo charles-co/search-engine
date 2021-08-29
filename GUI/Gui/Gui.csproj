@@ -141,12 +141,12 @@
     <Resource Include="Images\Home Button.png" />
     <Resource Include="Images\Info Button.png" />
     <Resource Include="Images\logo.png" />
-    <Resource Include="Images\vscode-icons_file-type-excel.png" />
-    <Resource Include="Images\vscode-icons_file-type-html.png" />
-    <Resource Include="Images\vscode-icons_file-type-light-json.png" />
-    <Resource Include="Images\vscode-icons_file-type-pdf.png" />
-    <Resource Include="Images\vscode-icons_file-type-powerpoint.png" />
-    <Resource Include="Images\vscode-icons_file-type-word.png" />
+    <Resource Include="Images\excel.png" />
+    <Resource Include="Images\html.png" />
+    <Resource Include="Images\json.png" />
+    <Resource Include="Images\pdf.png" />
+    <Resource Include="Images\powerpoint.png" />
+    <Resource Include="Images\word.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

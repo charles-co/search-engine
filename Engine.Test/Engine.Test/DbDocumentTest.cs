@@ -36,7 +36,7 @@ namespace Engine.Test
             _output.WriteLine($"Before teardown, no of docs: {docs.Count}");
             dColl.DeleteMany(filter);
             docs = dColl.Find(filter).ToList();
-            _output.WriteLine($"Ended, no of docs: {docs.Count}")
+            _output.WriteLine($"Ended, no of docs: {docs.Count}");
         }
     }
 }

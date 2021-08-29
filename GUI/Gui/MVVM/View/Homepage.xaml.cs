@@ -22,12 +22,27 @@ namespace Gui.MVVM.View
     {
         public Homepage()
         {
+            //From the App.xaml
             InitializeComponent();
+            bindListBox();
         }
+
+        private readonly string[] result = { "Stanley","Stans","Osy","Femi","Christian", "Stanley", "Stans", "Osy", "Femi", "Christian", "Stanley", "Stans", "Osy", "Femi", "Christian", "Stanley", "Stans", "Osy", "Femi", "Christian", "Stanley", "Stans", "Osy", "Femi", "Christian", "Stanley", "Stans", "Osy", "Femi", "Christian" };
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             Console.Write(e);
+        }
+
+        //Bind result array to SearchResults
+        private void bindListBox()
+        {
+            SearchResults.ItemsSource = result;
+        }
+
+        private void SearchResults_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            MessageBox.Show(SearchResults.SelectedItem.ToString(), "Search Results", MessageBoxButton.OKCancel, MessageBoxImage.Information);
         }
     }
 }
