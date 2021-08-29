@@ -13,12 +13,13 @@ namespace Engine {
         
         private static Semaphore _indexDoc = new Semaphore(1, 1);
 
-        private static string ExtractText(string url) {
+        private static string ExtractText(string url)
+        {
             var textExtractor = new TextExtractor();
-
-            var webPageContents = textExtractor.Extract(new Uri(url));
-
-            return webPageContents.Text;
+            var result = Uri.TryCreate(url, UriKind.Absolute, out var uri)
+                         && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
+            var contents = result ? textExtractor.Extract(uri) : textExtractor.Extract(url);
+            return contents.Text;
         }
         
         public static void TryIndex(DbDocument dbDocument) {

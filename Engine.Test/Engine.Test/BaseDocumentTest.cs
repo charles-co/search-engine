@@ -1,21 +1,30 @@
 using System;
 using Xunit;
+using Xunit.Abstractions;
 using Engine;
 
 namespace Engine.Test
 {
     public class BaseDocumentTest
     {
-        [Fact]
-        public void documentCreation()
-        {
-            string name = "Report on Search Engine Project";
-            string url = "https://test.com";
-            string documentId = "1";
+        private readonly ITestOutputHelper _output;
 
-            var doc1 = new BaseDocument(documentId);
-            var doc2 = new BaseDocument(name, url);
-            var doc3 = new BaseDocument(name, url, documentId);
+        public BaseDocumentTest(ITestOutputHelper output){
+            _output = output;
+        }
+
+        [Fact]
+        public void DocumentCreation()
+        {
+           const string name = "Report on Search Engine Project";
+           const string url = "https://test.com";
+           const string documentId = "1";
+
+           var doc1 = new BaseDocument(documentId);
+           var doc2 = new BaseDocument(name, url);
+           var doc3 = new BaseDocument(name, url, documentId);
+
+            _output.WriteLine("Test running.");
 
             Assert.True(doc1.documentId == documentId);
             Assert.True(doc2.name == name && doc2.url == url);
