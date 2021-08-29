@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GUI
+namespace Gui.MVVM.View
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for UploadContent.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class UploadContent : UserControl
     {
-        public MainWindow()
+        public UploadContent()
         {
             InitializeComponent();
         }
