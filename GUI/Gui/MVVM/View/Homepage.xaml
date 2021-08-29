@@ -6,12 +6,12 @@
              xmlns:local="clr-namespace:Gui.MVVM.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-
     <StackPanel>
         <StackPanel.Background>
             <SolidColorBrush Color="Black" Opacity="0.4"/>
         </StackPanel.Background>
-        <TextBox Width="436"
+        <StackPanel>
+            <TextBox Width="436"
                        Height="58"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Left"
@@ -19,26 +19,31 @@
                        FontSize="18"
                        Style="{StaticResource ModernTextbox}" Margin="0,12,0,10" TextChanged="TextBox_TextChanged"
         />
-        <TextBlock Text="Search Results"
+            <TextBlock Text="Search Results"
                    Foreground="White"
                    FontSize="32"
                    HorizontalAlignment="Left"
                    Margin="16,0,0,10"/>
 
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="10 Result(s)"
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="10 Result(s)"
                    Foreground="#cccccc"
                    FontSize="18"
                    HorizontalAlignment="Left"
                    Margin="10,0,0,20"/>
 
-            <TextBlock Text="Response time: 0.02s"
+                <TextBlock Text="Response time: 0.02s"
                    Foreground="#cccccc"
                    FontSize="18"
                    HorizontalAlignment="Left"
                    Margin="15,0,0,20"/>
+            </StackPanel>
         </StackPanel>
-
-
+        <ListBox x:Name="SearchResults" SelectionChanged="SearchResults_SelectionChanged" Margin="21,0,35,0" Height="300">
+            <ListBox.Background>
+                <SolidColorBrush Color="Black" Opacity="0.5"/>
+            </ListBox.Background>
+        </ListBox>
     </StackPanel>
+    
 </UserControl>
