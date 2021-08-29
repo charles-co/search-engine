@@ -43,6 +43,14 @@
             <ListBox.Background>
                 <SolidColorBrush Color="Black" Opacity="0.5"/>
             </ListBox.Background>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Title}" />
+                        <TextBlock Text="{Binding Description}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
     </StackPanel>
     

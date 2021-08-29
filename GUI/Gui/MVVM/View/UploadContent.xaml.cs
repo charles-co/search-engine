@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
+using Microsoft.Win32;
 
 namespace Gui.MVVM.View
 {
@@ -23,6 +25,25 @@ namespace Gui.MVVM.View
         public UploadContent()
         {
             InitializeComponent();
+        }
+
+        private void SelectFileBtn_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            openFileDialog.Filter = "Word Documents|*.doc|Excel Worksheets|*.xls,*.xlsx|PowerPoint Presentations|*.ppt,*.ppts" +
+             "|Office Files|*.doc;*.xls;*.ppt,*.pdf" + 
+             "|Web files|*.html,*.xml";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                fileName.Text = openFileDialog.FileName;
+            }
+            else
+            {
+                fileName.Text = "No file selected";
+            }
+                
         }
     }
 }

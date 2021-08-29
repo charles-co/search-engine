@@ -43,9 +43,11 @@
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <TextBlock Text="Upload File" Grid.Row="0" FontSize="18" Foreground="#fff"/>
-            <TextBox Grid.Row="1" Padding="5" FontSize="16" Height="70" Margin="0 5"/>
+            <Button Name="selectFileBtn" Click="SelectFileBtn_Click" Grid.Row="1" Padding="5" FontSize="16" Height="40">Select File</Button>
+            <TextBlock Name="fileName" Grid.Row="2" Foreground="#fff"/>
         </Grid>
         <Border CornerRadius="15" Grid.Row="5" HorizontalAlignment="Right" Margin="0,9,15,9" Width="120">
             <Button  FontSize="18"  Padding="30 5" Background="#003CB0" Foreground="#fff">Upload</Button>
