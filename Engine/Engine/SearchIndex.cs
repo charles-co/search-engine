@@ -3,6 +3,10 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Engine {
+    /// <summary>
+    /// SearchIndex inherits the Index class. It is used for the Querier class.
+    /// It instantiates itself with a list of words from the database.
+    /// </summary>
     public class SearchIndex : Index {
         public SearchIndex(string[] words) {
             var filter = Builders<BsonDocument>.Filter.In("word", words);

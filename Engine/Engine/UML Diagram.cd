@@ -1,150 +1,78 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
   <Class Name="Engine.BaseDocument">
-    <Position X="3.25" Y="0.75" Width="4.25" />
+    <Position X="3.5" Y="1.75" Width="4" />
     <TypeIdentifier>
-      <HashCode>CAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAAQAAAAAAAAACAAAAAAAAAA=</HashCode>
       <FileName>BaseDocument.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="System.Object" Collapsed="true">
+    <Position X="2.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
   <Class Name="Engine.DbDocument">
-    <Position X="2.25" Y="8" Width="4.75" />
+    <Position X="3" Y="6.5" Width="4.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAACIAAAAAAAAQAAAgAAAQAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAgAAACAAIAAAAAAAAAAAAAAQIAAAA=</HashCode>
       <FileName>DbDocument.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Engine.Connector">
-    <Position X="8.25" Y="13.25" Width="4.25" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAFAAAAAAAAgARAAhAAAAAAAAAAAAAQ=</HashCode>
-      <FileName>Connector.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="Engine.Index">
-    <Position X="13" Y="4.25" Width="4.75" />
+    <Position X="8.5" Y="1.75" Width="4.5" />
     <TypeIdentifier>
-      <HashCode>CAEAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>CAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAABAAA=</HashCode>
       <FileName>Index.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Engine.Indexer">
-    <Position X="3" Y="13.5" Width="3.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAQAAAAAAAAAAAAAAAAAAAAAAUAAAgAAAQAAAAA=</HashCode>
-      <FileName>Indexer.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="Engine.PositionPointer">
-    <Position X="17" Y="8.75" Width="4" />
-    <InheritanceLine Type="System.Object" ManuallyRouted="true" FixedToPoint="true">
-      <Path>
-        <Point X="10.5" Y="6.142" />
-        <Point X="10.5" Y="6.517" />
-        <Point X="15.292" Y="6.517" Type="JumpStart" />
-        <Point X="15.458" Y="6.517" Type="JumpEnd" />
-        <Point X="18.214" Y="6.517" />
-        <Point X="18.214" Y="8.75" />
-      </Path>
-    </InheritanceLine>
+    <Position X="13.75" Y="1.75" Width="4" />
     <TypeIdentifier>
-      <HashCode>AQAAAAAAAAAACAAAAAAAIQAGAAAAAAAAAAAAAAABAAA=</HashCode>
+      <HashCode>AABAAAAAAAAAAAAAAAggAAAAAAEAQgAAAAAAAAEAAAA=</HashCode>
       <FileName>PositionPointer.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="currentPosition" />
-    </ShowAsAssociation>
   </Class>
   <Class Name="Engine.Querier">
-    <Position X="14.5" Y="13.25" Width="4" />
+    <Position X="18.25" Y="1.75" Width="4.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAACAAACAAAAAEAAABEgAgAAAIAAAAAAAQAhgAAA=</HashCode>
+      <HashCode>AAAACACAAgGIAAAAAAAAAEgAgAAAIAAAAAAAQAhgAAA=</HashCode>
       <FileName>Querier.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Engine.Stemmer">
-    <Position X="21.75" Y="4.75" Width="3" />
-    <InheritanceLine Type="System.Object" FixedToPoint="true">
-      <Path>
-        <Point X="9.311" Y="3.5" />
-        <Point X="9.311" Y="3.315" />
-        <Point X="19.555" Y="3.315" Type="JumpStart" />
-        <Point X="19.722" Y="3.315" Type="JumpEnd" />
-        <Point X="23.188" Y="3.315" />
-        <Point X="23.188" Y="4.75" />
-      </Path>
-    </InheritanceLine>
+    <Position X="23.25" Y="1.75" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAQIBAAAACAACgAAgAAABAIARAAACBEAAAKAABAIAAA=</HashCode>
       <FileName>Stemmer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Engine.Token">
-    <Position X="25.75" Y="4.75" Width="4.5" />
-    <InheritanceLine Type="System.Object" FixedToPoint="true">
-      <Path>
-        <Point X="11.459" Y="3.5" />
-        <Point X="11.459" Y="3.315" />
-        <Point X="19.555" Y="3.315" Type="JumpStart" />
-        <Point X="19.722" Y="3.315" Type="JumpEnd" />
-        <Point X="28.187" Y="3.315" />
-        <Point X="28.187" Y="4.75" />
-      </Path>
-    </InheritanceLine>
+    <Position X="26.5" Y="1.75" Width="4.25" />
     <TypeIdentifier>
-      <HashCode>gAAAAAABAAAAAAAAAAAAAAACgAIAAACAAAgAAAAAAAA=</HashCode>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAACgIAAAAAKAABAAAAAAAA=</HashCode>
       <FileName>Token.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Engine.TokenItem">
-    <Position X="31.75" Y="4.75" Width="5.25" />
-    <InheritanceLine Type="System.Object" FixedToPoint="true">
-      <Path>
-        <Point X="10.021" Y="3.5" />
-        <Point X="10.021" Y="3.315" />
-        <Point X="19.555" Y="3.315" Type="JumpStart" />
-        <Point X="19.722" Y="3.315" Type="JumpEnd" />
-        <Point X="34.156" Y="3.315" />
-        <Point X="34.156" Y="4.75" />
-      </Path>
-    </InheritanceLine>
+    <Position X="31.25" Y="1.75" Width="4.75" />
     <TypeIdentifier>
-      <HashCode>CAAAAAAAAAAAAAAQAQAAIAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <HashCode>AAAAAAgAAAAAAAAgAQAAAAAAAAAAAAAAEAAAAAAAQAA=</HashCode>
       <FileName>TokenItem.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Engine.Utils">
-    <Position X="38.5" Y="4.75" Width="4.5" />
-    <InheritanceLine Type="System.Object" FixedToPoint="true">
-      <Path>
-        <Point X="10.74" Y="3.5" />
-        <Point X="10.74" Y="3.315" />
-        <Point X="19.555" Y="3.315" Type="JumpStart" />
-        <Point X="19.722" Y="3.315" Type="JumpEnd" />
-        <Point X="40.938" Y="3.315" />
-        <Point X="40.938" Y="4.75" />
-      </Path>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>AAAIAAAgAAAAAAAAAAAAAAAAAAAIACBAAAAACgAAAAA=</HashCode>
-      <FileName>Utils.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="System.Object">
-    <Position X="8.75" Y="3.5" Width="3.5" />
-    <TypeIdentifier />
-  </Class>
   <Class Name="Engine.SearchIndex">
-    <Position X="14.25" Y="7.75" Width="2.25" />
+    <Position X="9.5" Y="5.25" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>SearchIndex.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Struct Name="System.Int32" Collapsed="true">
-    <Position X="22.5" Y="1.75" Width="1.5" />
-    <TypeIdentifier />
-    <Lollipop Position="0.2" />
-  </Struct>
+  <Class Name="Engine.Utils">
+    <Position X="36.5" Y="1.75" Width="4.75" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAgAAAAAAAAAAAAAAAAAAAIACBAAAAACgAAAAA=</HashCode>
+      <FileName>Utils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
