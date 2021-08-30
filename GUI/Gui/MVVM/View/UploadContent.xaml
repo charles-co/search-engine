@@ -29,30 +29,30 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <TextBlock Text="Title:" Grid.Row="0" FontSize="18" Foreground="#fff"/>
-            <TextBox Grid.Row="1" Padding="5" FontSize="16" Margin="0 5"/>
+            <TextBox Name="DocumentTitle" Grid.Row="1" Padding="5" FontSize="16" Margin="0 5"/>
         </Grid>
-        <Grid Grid.Row="3" Margin="15 10" x:Name="Description">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <TextBlock Text="Description:" Grid.Row="0" FontSize="18" Foreground="#fff"/>
-            <TextBox Grid.Row="1" Padding="5" FontSize="16" Height="70" Margin="0 5"/>
-        </Grid>
-        <Grid Grid.Row="4" Margin="15 10" x:Name="File">
+        <!-- <Grid Grid.Row="3" Margin="15 10" x:Name="Description"> -->
+        <!--     <Grid.RowDefinitions> -->
+        <!--         <RowDefinition/> -->
+        <!--         <RowDefinition/> -->
+        <!--     </Grid.RowDefinitions> -->
+        <!--     <TextBlock Text="Description:" Grid.Row="0" FontSize="18" Foreground="#fff"/> -->
+        <!--     <TextBox Grid.Row="1" Padding="5" FontSize="16" Height="70" Margin="0 5"/> -->
+        <!-- </Grid> -->
+        <Grid Grid.Row="3" Margin="15 10" x:Name="File">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <TextBlock Text="Upload File" Grid.Row="0" FontSize="18" Foreground="#fff"/>
-            <Button Name="selectFileBtn" Click="SelectFileBtn_Click" Grid.Row="1" Padding="5" FontSize="16" Height="40">Select File</Button>
-            <TextBlock Name="fileName" Grid.Row="2" Foreground="#fff"/>
+            <Button Name="SelectFileButton" Click="SelectFileBtn_Click" Grid.Row="1" Padding="5" FontSize="16" Height="40">Select File</Button>
+            <TextBlock Name="FileName" Grid.Row="2" Foreground="#fff" FontSize="18" Margin="0 10 0 0 "/>
         </Grid>
-        <Border CornerRadius="15" Grid.Row="5" HorizontalAlignment="Right" Margin="0,9,15,9" Width="120">
-            <Button  FontSize="18"  Padding="30 5" Background="#003CB0" Foreground="#fff">Upload</Button>
+        <Border Name="UploadFileBtnWrapper" CornerRadius="15" Grid.Row="5" HorizontalAlignment="Right" Margin="0,9,15,9" Width="120">
+            <Button Name="UploadFileBtn" Click="UploadFileBtn_Click" FontSize="18"  Padding="30 5" Background="#003CB0" Foreground="#fff">Upload</Button>
         </Border>
-        <TextBlock Grid.Row="6" Text="N.B: Files will be indexed 2 hours after upload" Foreground="#fff" FontStyle="Italic" Margin="10"/>
+        <TextBlock Grid.Row="6" Text="N.B: Files will be indexed within 2 hours after upload" Foreground="#fff" FontStyle="Italic" Margin="10"/>
 
     </Grid>
 </UserControl>

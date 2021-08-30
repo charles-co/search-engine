@@ -57,7 +57,7 @@ namespace Engine {
 
             }
             catch (Exception e) {
-                Console.WriteLine(e.StackTrace, e.Message);
+                Console.WriteLine(e.StackTrace, e.Message); //TODO: Log to file
             }
 
             _resultDocuments = new BaseDocument[0];
