@@ -261,6 +261,7 @@
         <Compile Include="DbDocumentTest.cs" />
         <Compile Include="IndexTest.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="TokenTest.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />

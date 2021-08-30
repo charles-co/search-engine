@@ -1,5 +1,4 @@
-using System.IO;
-using System.Threading;
+﻿using System.Threading;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
@@ -9,15 +8,15 @@ using Engine;
 
 namespace Engine.Test
 {
-    public class QuerierTest
+    public class TokenTest
     {
         private static readonly string _name = "Report for testing";
-        private static readonly string _url = "https://res.cloudinary.com/dpgdjfckl/raw/upload/v1629749999/fat_dydkjd.txt";
+        private static readonly string _url = "../../fixtures/CSC326.docx";
 
         private readonly ITestOutputHelper _output;
         FilterDefinition<BsonDocument> _filter = Builders<BsonDocument>.Filter.Eq("name", _name);
 
-        public QuerierTest(ITestOutputHelper output)
+        public TokenTest(ITestOutputHelper output)
         {
             _output = output;
         }
@@ -33,7 +32,7 @@ namespace Engine.Test
             _output.WriteLine($"Before setup, no of docs: {docs}");
 
             DbDocument.IndexDocument(_name, _url);
-            Thread.Sleep(10000);
+            Thread.Sleep(5000);
             
             docs = dColl.CountDocuments(new BsonDocument());
             _output.WriteLine($"After setup, no of docs: {docs}");
@@ -61,22 +60,16 @@ namespace Engine.Test
             _output.WriteLine($"Ended, no of tokens: {tokens}");
         }
 
-        [Theory]
-        [InlineData("dog")]
-        [InlineData("dog fat")]
-        public async void SearchTest(string query)
+        [Fact]
+        public void TokenCreationTest()
         {
             SetupDb();
-            _output.WriteLine("Started search");
-            var querier = new Querier();
-            var result = await querier.Search(query);
-            var doc = Connector.GetDocumentsCollection().AsQueryable().ToList()[0];
-
-            Assert.Single(result);
-
-            if (result.Length > 0) {
-                Assert.Equal(doc["_id"].ToString(), result[0].DocumentId);
-            }
+            var dbtoken = Connector.GetTokensCollection().AsQueryable().FirstOrDefault();
+            var word = dbtoken["word"].ToString();
+            var documents = dbtoken["documents"].AsBsonArray.ToArray();
+            var frequency = dbtoken["frequency"].ToInt32();
+            var token = new Token(word, documents, frequency);
+            Assert.Equal(1, 1);
             TearDown();
         }
     }
