@@ -1,6 +1,9 @@
 ﻿using Priority_Queue;
 
 namespace Engine {
+    /// <summary>
+    /// ScoreDocumentNode class computes and records the score of a particular document in a queue
+    /// </summary>
     public class ScoreDocumentNode : StablePriorityQueueNode {
         public readonly string DocumentId;
 

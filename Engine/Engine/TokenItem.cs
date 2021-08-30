@@ -6,8 +6,17 @@ namespace Engine {
     /// This class represents a document under a token
     /// </summary>
     public class TokenItem {
+        /// <summary>
+        /// Positions contains the particular postion a token exists in a document
+        /// </summary>
         public readonly List<int> Positions = new List<int>();
+        /// <summary>
+        /// DocumentId contains the ID of the particular document 
+        /// </summary>
         public readonly string DocumentId;
+        /// <summary>
+        /// DocumentPosition contains the positions where the token is found
+        /// </summary>
         public readonly long DocumentPosition;
         
         /// <summary>

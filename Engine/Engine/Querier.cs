@@ -12,11 +12,29 @@ using Exception = System.Exception;
 using Math = System.Math;
 
 namespace Engine {
+    /// <summary>
+    /// Querier class is used for querying the database with built index for specific words 
+    /// </summary>
     public class Querier {
+        /// <summary>
+        /// _pointersQueue is used to keep track of the particular items we are used for the linear mapping algorithm 
+        /// </summary>
         private StablePriorityQueue<TokenPointer> _pointersQueue;
+        /// <summary>
+        /// _scoresQueue used for storing the score of each document while looping through
+        /// </summary>
         private SimplePriorityQueue<ScoreDocumentNode> _scoresQueue;
+        /// <summary>
+        /// _documentsCount stores the number of documents to be used when obtaining the TFIDF of each document
+        /// </summary>
         private long _documentsCount;
+        /// <summary>
+        /// _resultDocuments is an array of the result documents
+        /// </summary>
         private BaseDocument [] _resultDocuments;
+        /// <summary>
+        /// arrangedPointers returns the pointers the way they are in the query. This is used in the consecutive word algorithm.
+        /// </summary>
         private List<TokenPointer> arrangedPointers = new List<TokenPointer>();
 
         public static string[] GetPastQueries(string query) {
