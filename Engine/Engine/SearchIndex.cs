@@ -8,6 +8,10 @@ namespace Engine {
     /// It instantiates itself with a list of words from the database.
     /// </summary>
     public class SearchIndex : Index {
+        /// <summary>
+        /// Makes a new instance of <see cref="SearchIndex"/>
+        /// </summary>
+        /// <param name="words">These are the words that are loaded from the db</param>
         public SearchIndex(string[] words) {
             var filter = Builders<BsonDocument>.Filter.In("word", words);
             var tokensCollection = Connector.GetTokensCollection();

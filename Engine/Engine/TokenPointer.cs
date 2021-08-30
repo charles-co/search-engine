@@ -13,17 +13,22 @@ namespace Engine {
         
         public TokenItem Target => _index < _targets.Count ? _targets[_index] : null;
 
+        /// <summary>
+        /// Creates an empty <see cref="TokenPointer"/>
+        /// </summary>/
         public TokenPointer() {
             EmptyPointer = true;
         }
-
+        /// <summary>
+        /// Creates a new instance of token pointer with a target token and target documents
+        /// </summary>/
         public TokenPointer(Token targetToken) {
             Token = targetToken;
             _targets = targetToken.Documents;
         }
 
         /// <summary>
-        /// Move Forward function is used to move the current index by 1
+        /// Moves the current index forward by 1
         /// </summary>
         public bool MoveForward() {
             if (_index + 1 < _targets.Count) {
