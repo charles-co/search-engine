@@ -19,10 +19,13 @@ It consumes the Engine class library directly and provides a UI for searching do
 
 This is a rest API written with .NET framework that consumes the Engine and provides endpoints for searching and indexing documents
 
-## How to Run
+## How to Run/Build
 - Engine
 
-Set a MONGODB_URI environment variable and build the project into a dll file
+You can set either
+
+1. Set the mongodb uri via the Connector.SetMongoUri 
+2. Install mongodb locally and run it. The connector defaults to using a local instance
 
 - Engine.Test
 

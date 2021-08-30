@@ -20,6 +20,14 @@ namespace Engine {
         }
 
         /// <summary>
+        /// Allows the user to set a mongo db url
+        /// </summary>
+        /// <param name="url">The target cluster url</param>
+        public static void SetMongoUri(string url) {
+            _mongoUrl = $"{url}/{_database}?retryWrites=true&w=majority";
+        } 
+
+        /// <summary>
         /// Sets database to test db 
         /// </summary>
         public static void SetTestMode()
