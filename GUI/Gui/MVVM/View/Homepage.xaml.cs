@@ -107,8 +107,8 @@ namespace Gui.MVVM.View {
                         Hyperlink hyperlink = new Hyperlink();
                         Run run = new Run();
 
-                        run.Text = document.name;
-                        hyperlink.NavigateUri = new Uri(document.url);
+                        run.Text = document.Name;
+                        hyperlink.NavigateUri = new Uri(document.Url);
                         hyperlink.Style = Resources["DownloadLink"] as Style;
                         hyperlink.Inlines.Add(run);
 
