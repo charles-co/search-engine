@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using java.lang;
 using java.util;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using Priority_Queue;
+using Exception = System.Exception;
+using Math = System.Math;
 
 namespace Engine {
     public class Querier {
@@ -15,6 +18,19 @@ namespace Engine {
         private long _documentsCount;
         private BaseDocument [] _resultDocuments;
         private List<TokenPointer> arrangedPointers = new List<TokenPointer>();
+
+        public static string[] GetPastQueries(string query) {
+            var getQueriesFilter = Builders<BsonDocument>.Filter.Regex("query", new BsonRegularExpression($"^{query}"));
+            var savedQueriesCollection = Connector.GetSavedQueriesCollection();
+            var savedQueries = savedQueriesCollection.Find(getQueriesFilter).Limit(10).SortByDescending(x => x["count"]).ToList();
+            var queries = new string[savedQueries.Count];
+
+            for (int i = 0; i < savedQueries.Count; i++) {
+                queries[i] = savedQueries[i].ToBsonDocument()["query"].ToString();
+            }
+
+            return queries;
+        }
         
         public async Task<BaseDocument []> Search(string query) {
             try {
@@ -34,6 +50,8 @@ namespace Engine {
                     await FetchDocumentDetails();
                     Console.WriteLine($"Fetch documents {(DateTime.Now - start).TotalMilliseconds}");
 
+                    Task.Run(() => SaveQueryToDb(query));
+                    
                     return _resultDocuments;
                 }
 
@@ -46,6 +64,29 @@ namespace Engine {
             return _resultDocuments;
         }
 
+        private async void SaveQueryToDb(string query) {
+            var getFilter = Builders<BsonDocument>.Filter.Eq("query", query);
+            var savedQueriesCollection = Connector.GetSavedQueriesCollection();
+            var prevQuery = savedQueriesCollection.Find(getFilter).FirstOrDefault();
+
+            if (prevQuery != null) {
+                var queryBson = prevQuery.ToBsonDocument();
+                int count = queryBson["count"].ToInt32();
+                var update = Builders<BsonDocument>.Update.Set("count", count + 1);
+                await savedQueriesCollection.UpdateOneAsync(getFilter, update);
+            }
+            else {
+                var token = new BsonDocument {
+                    {"query", query},
+                    {"count", 1},
+                };
+                
+                await savedQueriesCollection.InsertOneAsync(token);
+            }
+            
+            Console.WriteLine($"{query} saved to saved queries collection");
+        }
+        
         private async Task FetchDocumentDetails() {
             string[] resultIds = new string[_scores.Count];
             _resultDocuments = new BaseDocument[_scores.Count];

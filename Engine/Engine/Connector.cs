@@ -43,5 +43,10 @@ namespace Engine {
             var db = GetDb();
             return db.GetCollection<BsonDocument>("tokens");
         }
+        
+        public static IMongoCollection<BsonDocument> GetSavedQueriesCollection() {
+            var db = GetDb();
+            return db.GetCollection<BsonDocument>("savedQueries");
+        }
     }
 }

@@ -59,15 +59,14 @@ namespace Engine {
         
         public async Task SaveSelfToDb() {
             var getFilter = Builders<BsonDocument>.Filter.Eq("word", word);
-            var prevToken = Connector.GetTokensCollection().Find(getFilter).FirstOrDefault();
+            var tokensCollection = Connector.GetTokensCollection();
+            var prevToken = tokensCollection.Find(getFilter).FirstOrDefault();
 
             if (prevToken != null) {
                 var taskBson = prevToken.ToBsonDocument();
                 var previousDocuments = BsonSerializer.Deserialize<BsonArray>(taskBson["documents"].ToJson());
                 var newDocuments = previousDocuments.AddRange(GetBsonDocuments());
                 
-                var tokensCollection = Connector.GetTokensCollection();
-
                 var update = Builders<BsonDocument>.Update.Set("documents", newDocuments).Set("frequency", prevToken["frequency"].ToInt32() + frequency);
 
                 await tokensCollection.UpdateOneAsync(getFilter, update);
@@ -78,8 +77,6 @@ namespace Engine {
                     {"documents", GetBsonDocuments()},
                     {"frequency", frequency}
                 };
-
-                var tokensCollection = Connector.GetTokensCollection();
                 
                 await tokensCollection.InsertOneAsync(token);
             }
