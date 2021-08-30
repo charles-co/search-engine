@@ -19,25 +19,41 @@
             <SolidColorBrush Color="Black" Opacity="0.4" />
         </StackPanel.Background>
         <StackPanel>
-            <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="36" Margin="20 20 0 10">
+            <Grid 
+                VerticalAlignment="Top"
+                HorizontalAlignment="Stretch"
+                Height="36"
+                Margin="20 20 20 0"
+            >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-
                 <TextBox
                     Height="36"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Stretch"
                     Grid.ColumnSpan="3"
                     FontSize="18"
-                    Name="SearchInput" KeyDown="OnKeyDownHandler"/>
+                    Name="SearchInput" KeyDown="OnKeyDownHandler" TextChanged="OnTextChanged"/>
                 <Button Grid.Column="3" Style="{StaticResource SearchButton}" Click="Button_OnSearch">
                     Search
                 </Button>
             </Grid>
+            <ListBox
+                x:Name="Suggestions"
+                Height="0"
+                HorizontalAlignment="Stretch"
+                Margin="20 0 20 10"
+                Visibility="Hidden"
+                SelectionChanged="SearchResults_SelectionChanged"
+            >
+                <ListBox.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.5" />
+                </ListBox.Background>
+            </ListBox>
             <TextBlock Text="Search Results"
                        Foreground="White"
                        FontSize="32"
