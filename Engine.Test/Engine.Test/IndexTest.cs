@@ -1,3 +1,4 @@
+using System.IO;
 using System.Threading;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -8,69 +9,74 @@ using Engine;
 
 namespace Engine.Test
 {
-    public class IndexTest
+    public class QuerierTest
     {
         private static readonly string _name = "Report for testing";
-        private static readonly string _url = "../../fixtures/CSC326.docx";
+        private static readonly string _url = "https://res.cloudinary.com/dpgdjfckl/raw/upload/v1629749999/fat_dydkjd.txt";
 
         private readonly ITestOutputHelper _output;
-        public DbDocument Dbdoc { get; private set; }
         FilterDefinition<BsonDocument> _filter = Builders<BsonDocument>.Filter.Eq("name", _name);
 
-        public IndexTest(ITestOutputHelper output)
+        public QuerierTest(ITestOutputHelper output)
         {
             _output = output;
         }
 
         private void SetupDb()
         {
-            
+
             Connector.SetTestMode();
             var dColl = Connector.GetDocumentsCollection();
             dColl.DeleteMany(new BsonDocument());
-            var docs = dColl.AsQueryable().ToList();
-            
-            _output.WriteLine($"Before setup, no of docs: {docs.Count}");
-            
+            var docs = dColl.CountDocuments(new BsonDocument());
+
+            _output.WriteLine($"Before setup, no of docs: {docs}");
+
             DbDocument.IndexDocument(_name, _url);
-            Thread.Sleep(5000);
-            var document = Connector.GetDocumentsCollection().Find(_filter).SingleOrDefault();
-            _output.WriteLine($"{document.GetValue("_id")}");
-            document.Remove("_id");
-            Dbdoc = BsonSerializer.Deserialize<DbDocument>(document);
+            Thread.Sleep(10000);
             
-            docs = dColl.AsQueryable().ToList();
-            _output.WriteLine($"After setup, no of docs: {docs.Count}");
+            docs = dColl.CountDocuments(new BsonDocument());
+            _output.WriteLine($"After setup, no of docs: {docs}");
+            var tColl = Connector.GetTokensCollection();
+            var tokens = tColl.CountDocuments(new BsonDocument()); 
+            _output.WriteLine($"After setup, no of tokens: {tokens}");
         }
 
         private void TearDown()
         {
             var dColl = Connector.GetDocumentsCollection();
-            var docs = dColl.AsQueryable().ToList();
-            _output.WriteLine($"Before teardown, no of docs: {docs.Count}");
+            var docs = dColl.CountDocuments(new BsonDocument());
+            _output.WriteLine($"Before teardown, no of docs: {docs}");
             dColl.DeleteMany(new BsonDocument());
-            docs = dColl.Find(_filter).ToList();
-            _output.WriteLine($"Ended, no of docs: {docs.Count}");  
+            docs = dColl.CountDocuments(_filter);
             
+            
+            _output.WriteLine($"Ended, no of docs: {docs}");
+
             var tColl = Connector.GetTokensCollection();
-            var tokens = tColl.AsQueryable().ToList();
-            _output.WriteLine($"Before teardown, no of tokens: {tokens.Count}");
+            var tokens = tColl.CountDocuments(new BsonDocument());
+            _output.WriteLine($"Before teardown, no of tokens: {tokens}");
             tColl.DeleteMany(new BsonDocument());
-            tokens = tColl.Find(new BsonDocument()).ToList();
-            _output.WriteLine($"Ended, no of tokens: {tokens.Count}"); 
+            tokens = tColl.CountDocuments(new BsonDocument());
+            _output.WriteLine($"Ended, no of tokens: {tokens}");
         }
 
         [Fact]
-        public void IndexDocument()
+        public async void SearchTest()
         {
             SetupDb();
-            var document = Connector.GetDocumentsCollection().Find(_filter).SingleOrDefault();
-            var token = Connector.GetTokensCollection().AsQueryable().FirstOrDefault();
-            _output.WriteLine($"{token}, {document}");
-            Assert.NotNull(document);
-            Assert.NotNull(token);
+            _output.WriteLine("Started search");
+            var query = "dog";
+            var querier = new Querier();
+            var result = await querier.Search(query);
+            var doc = Connector.GetDocumentsCollection().AsQueryable().ToList()[0];
+
+            Assert.Single(result);
+
+            if (result.Length > 0) {
+                Assert.Equal(doc["_id"].ToString(), result[0].DocumentId);
+            }
             TearDown();
         }
-
     }
 }

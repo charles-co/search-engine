@@ -6,9 +6,10 @@
     &lt;TestId&gt;xUnit::B79759F3-2D38-4F20-A539-BBBEB519B993::.NETFramework,Version=v4.8::Engine.Test.DbDocumentTest.IndexDocument&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=49eeb149_002D3643_002D4dc8_002Dad3b_002D0ac74d290b21/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="IndexDocument" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=49eeb149_002D3643_002D4dc8_002Dad3b_002D0ac74d290b21/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="IndexDocument" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::B79759F3-2D38-4F20-A539-BBBEB519B993::.NETFramework,Version=v4.8::Engine.Test.DbDocumentTest.IndexDocument&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::B79759F3-2D38-4F20-A539-BBBEB519B993::.NETFramework,Version=v4.8::Engine.Test.QuerierTest.SearchTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=af038b27_002D215d_002D4628_002D83f3_002Dd9cc9ae8daae/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="IndexDocument #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
@@ -26,10 +27,12 @@
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::B79759F3-2D38-4F20-A539-BBBEB519B993::.NETFramework,Version=v4.8::Engine.Test.DbDocumentTest&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::B79759F3-2D38-4F20-A539-BBBEB519B993::.NETFramework,Version=v4.8::Engine.Test.IndexTest.IndexDocument&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::B79759F3-2D38-4F20-A539-BBBEB519B993::.NETFramework,Version=v4.8::Engine.Test.QuerierTest.SearchTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ea4df0a1_002D66cc_002D4b5c_002Dba29_002D2ae929832b77/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="IndexDocument #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ea4df0a1_002D66cc_002D4b5c_002Dba29_002D2ae929832b77/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="IndexDocument #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::B79759F3-2D38-4F20-A539-BBBEB519B993::.NETFramework,Version=v4.8::Engine.Test.DbDocumentTest.IndexDocument&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::B79759F3-2D38-4F20-A539-BBBEB519B993::.NETFramework,Version=v4.8::Engine.Test.QuerierTest.SearchTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

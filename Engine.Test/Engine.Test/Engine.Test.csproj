@@ -273,6 +273,7 @@
       <Content Include="Core\Compression\Snappy\lib\win\snappy64.dll" />
       <Content Include="Core\Compression\Zstandard\lib\win\libzstd.dll" />
       <Content Include="fixtures\CSC326.docx" />
+      <Content Include="fixtures\fat.txt" />
       <Content Include="libmongocrypt.dylib" />
       <Content Include="libmongocrypt.so" />
       <Content Include="mongocrypt.dll" />
