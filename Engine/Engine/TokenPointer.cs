@@ -2,6 +2,9 @@
 using Priority_Queue;
 
 namespace Engine {
+    /// <summary>
+    /// Token Pointer class is used for the linear mapping algorithm
+    /// </summary>
     public class TokenPointer : StablePriorityQueueNode {
         private readonly List<TokenItem> _targets;
         public readonly Token Token;
@@ -19,6 +22,9 @@ namespace Engine {
             _targets = targetToken.Documents;
         }
 
+        /// <summary>
+        /// Move Forward function is used to move the current index by 1
+        /// </summary>
         public bool MoveForward() {
             if (_index + 1 < _targets.Count) {
                 _index++;
