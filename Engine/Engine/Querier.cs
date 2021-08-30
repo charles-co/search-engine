@@ -1,20 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using java.lang;
 using java.util;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using Priority_Queue;
+using Exception = System.Exception;
+using Math = System.Math;
 
 namespace Engine {
     public class Querier {
-        private StablePriorityQueue<TokenPointer> _queue;
-        private SimplePriorityQueue<ScoreDocumentNode> _scores;
+        private StablePriorityQueue<TokenPointer> _pointersQueue;
+        private SimplePriorityQueue<ScoreDocumentNode> _scoresQueue;
         private long _documentsCount;
         private BaseDocument [] _resultDocuments;
-        private List<TokenPointer> arrangedPointers = new List<TokenPointer>(); //TODO: This is to correct consecutive
+        private List<TokenPointer> arrangedPointers = new List<TokenPointer>();
+
+        public static string[] GetPastQueries(string query) {
+            var getQueriesFilter = Builders<BsonDocument>.Filter.Regex("query", new BsonRegularExpression($"^{query}"));
+            var savedQueriesCollection = Connector.GetSavedQueriesCollection();
+            var savedQueries = savedQueriesCollection.Find(getQueriesFilter).Limit(10).SortByDescending(x => x["count"]).ToList();
+            var queries = new string[savedQueries.Count];
+
+            for (int i = 0; i < savedQueries.Count; i++) {
+                queries[i] = savedQueries[i].ToBsonDocument()["query"].ToString();
+            }
+
+            return queries;
+        }
         
         public async Task<BaseDocument []> Search(string query) {
             try {
@@ -24,7 +40,7 @@ namespace Engine {
                 Index searchIndex = new SearchIndex(cleanedWords);
                 Console.WriteLine($"Load words {(DateTime.Now - start).TotalMilliseconds}");
                 
-                if (searchIndex.tokens.Count != 0) {
+                if (searchIndex.Tokens.Count != 0) {
                     _documentsCount = await Connector.GetDocumentsCollection().CountDocumentsAsync(new BsonDocument());
                     start = DateTime.Now;
                     GeneratePointers(searchIndex, cleanedWords);
@@ -34,28 +50,53 @@ namespace Engine {
                     await FetchDocumentDetails();
                     Console.WriteLine($"Fetch documents {(DateTime.Now - start).TotalMilliseconds}");
 
+                    Task.Run(() => SaveQueryToDb(query));
+                    
                     return _resultDocuments;
                 }
 
             }
             catch (Exception e) {
-                Console.WriteLine(e.StackTrace, e.Message);
+                Console.WriteLine(e.StackTrace, e.Message); //TODO: Log to file
             }
 
             _resultDocuments = new BaseDocument[0];
             return _resultDocuments;
         }
 
+        private async void SaveQueryToDb(string query) {
+            var getFilter = Builders<BsonDocument>.Filter.Eq("query", query);
+            var savedQueriesCollection = Connector.GetSavedQueriesCollection();
+            var prevQuery = savedQueriesCollection.Find(getFilter).FirstOrDefault();
+
+            if (prevQuery != null) {
+                var queryBson = prevQuery.ToBsonDocument();
+                int count = queryBson["count"].ToInt32();
+                var update = Builders<BsonDocument>.Update.Set("count", count + 1);
+                await savedQueriesCollection.UpdateOneAsync(getFilter, update);
+            }
+            else {
+                var token = new BsonDocument {
+                    {"query", query},
+                    {"count", 1},
+                };
+                
+                await savedQueriesCollection.InsertOneAsync(token);
+            }
+            
+            Console.WriteLine($"{query} saved to saved queries collection");
+        }
+        
         private async Task FetchDocumentDetails() {
-            string[] resultIds = new string[_scores.Count];
-            _resultDocuments = new BaseDocument[_scores.Count];
+            string[] resultIds = new string[_scoresQueue.Count];
+            _resultDocuments = new BaseDocument[_scoresQueue.Count];
             
             List<FilterDefinition<BsonDocument>> filtersList = new List<FilterDefinition<BsonDocument>>();
             
-            while (_scores.Count > 0) {
-                var currentDoc = _scores.Dequeue();
-                resultIds[_scores.Count] = currentDoc.DocumentId;
-                _resultDocuments[_scores.Count] = new BaseDocument(currentDoc.DocumentId);
+            while (_scoresQueue.Count > 0) {
+                var currentDoc = _scoresQueue.Dequeue();
+                resultIds[_scoresQueue.Count] = currentDoc.DocumentId;
+                _resultDocuments[_scoresQueue.Count] = new BaseDocument(currentDoc.DocumentId);
                 
                 var getFilter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(currentDoc.DocumentId));
                 filtersList.Add(getFilter);
@@ -75,19 +116,19 @@ namespace Engine {
             for (int i = 0; i < resultIds.Length; i++) {
                 var id = resultIds[i];
                 var values = docIdToValueMapping[id];
-                _resultDocuments[i].name = values["name"].ToString();
-                _resultDocuments[i].url = values["url"].ToString();
+                _resultDocuments[i].Name = values["name"].ToString();
+                _resultDocuments[i].Url = values["url"].ToString();
             }
         }
 
         private void GeneratePointers(Index targetIndex, string [] words) {
-            _queue = new StablePriorityQueue<TokenPointer>(words.Length);
-            _scores = new SimplePriorityQueue<ScoreDocumentNode>();
+            _pointersQueue = new StablePriorityQueue<TokenPointer>(words.Length);
+            _scoresQueue = new SimplePriorityQueue<ScoreDocumentNode>();
             
             foreach (var word in words) {
-                if (targetIndex.tokens.ContainsKey(word)) {
-                    var pointer = new TokenPointer(targetIndex.tokens[word]);
-                    _queue.Enqueue(pointer, pointer.target.documentPosition);
+                if (targetIndex.Tokens.ContainsKey(word)) {
+                    var pointer = new TokenPointer(targetIndex.Tokens[word]);
+                    _pointersQueue.Enqueue(pointer, pointer.Target.DocumentPosition);
                     arrangedPointers.Add(pointer);
                 }
                 else {
@@ -100,12 +141,12 @@ namespace Engine {
             List<TokenPointer> smallestPointers = ExtractSmallest();
             ScorePointers(smallestPointers);
             foreach (var pointer in smallestPointers) {
-                if (pointer.moveForward()) {
-                    _queue.Enqueue(pointer, pointer.target.documentPosition);
+                if (pointer.MoveForward()) {
+                    _pointersQueue.Enqueue(pointer, pointer.Target.DocumentPosition);
                 };
             }
 
-            if (_queue.Count > 0) {
+            if (_pointersQueue.Count > 0) {
                 LinearMap();
             }
         }
@@ -114,21 +155,21 @@ namespace Engine {
             double documentScore = 0;
 
             foreach (var tokenPointer in pointers) {
-                var target = tokenPointer.target;
-                double termFrequency = target.positions.Count;
-                double documentsWithTerm = tokenPointer.token.frequency;
+                var target = tokenPointer.Target;
+                double termFrequency = target.Positions.Count;
+                double documentsWithTerm = tokenPointer.Token.Frequency;
 
                 double tfIdf = termFrequency * Math.Log(_documentsCount / documentsWithTerm, 2);
                 
                 documentScore += tfIdf;
             }
 
-            double d = ScoreConsecutiveWords(pointers[0].target.documentId);
+            double d = ScoreConsecutiveWords(pointers[0].Target.DocumentId);
 
             documentScore += d;
             
-            string targetDocumentId = pointers[0].target.documentId;
-            _scores.Enqueue(new ScoreDocumentNode(targetDocumentId), (float) documentScore);
+            string targetDocumentId = pointers[0].Target.DocumentId;
+            _scoresQueue.Enqueue(new ScoreDocumentNode(targetDocumentId), (float) documentScore);
         }
 
         private double ScoreConsecutiveWords(string targetDocumentId) {
@@ -137,12 +178,12 @@ namespace Engine {
             List<PositionPointer> positionPointers = new List<PositionPointer>();
             
             foreach (var pointer in arrangedPointers) {
-                if (pointer.emptyPointer) {
+                if (pointer.EmptyPointer) {
                     positionPointers.Add(new PositionPointer());   
                 }
                 else {
                     //Add position arrays to pointers array
-                    positionPointers.Add(new PositionPointer(pointer.target.positions, pointer.target.documentId == targetDocumentId));   
+                    positionPointers.Add(new PositionPointer(pointer.Target.Positions, pointer.Target.DocumentId == targetDocumentId));   
                 }
             }
 
@@ -157,7 +198,7 @@ namespace Engine {
                 for (int i = 0; i < positionPointers.Count; i++) {
                     var positionPointer = positionPointers[i];
 
-                    if (positionPointer.emptyPointer || !positionPointer.isValid) {
+                    if (positionPointer.EmptyPointer || !positionPointer.IsValid) {
                         if (currentRunOn > 1) {
                             consecutiveCount += currentRunOn;
                             currentRunOn = 1;
@@ -171,12 +212,12 @@ namespace Engine {
                     }
                     
                     //If we have invalid just break out of loop to save resources
-                    if (positionPointer.currentPosition == -1) {
-                        hasInvalidPointer = positionPointer.currentPosition == -1;
+                    if (positionPointer.CurrentPosition == -1) {
+                        hasInvalidPointer = positionPointer.CurrentPosition == -1;
                         break;
                     }
                     
-                    if (positionPointer.currentPosition != -1) {
+                    if (positionPointer.CurrentPosition != -1) {
                         //If first item start the run
                         if (i == 0) {
                             currentRunOn = 1;
@@ -184,15 +225,15 @@ namespace Engine {
                         else {
                             //Else check if previous item is directly before current item
                             var prevPointer = positionPointers[i - 1];
-                            if (positionPointer.currentPosition - 1 == prevPointer.currentPosition) {
+                            if (positionPointer.CurrentPosition - 1 == prevPointer.CurrentPosition) {
                                 currentRunOn++;
                             }
                             //Else if current item position is behind previous item
                             //(which it shouldn't be because of the order of the words should match the query)
                             //Then move the current item forward until it's ahead of the previous item
-                            else if (positionPointer.currentPosition < prevPointer.currentPosition) {
-                                positionPointer.moveForwardUntilGreaterThanOrEqualTo(prevPointer.currentPosition);
-                                if (positionPointer.currentPosition - 1 == prevPointer.currentPosition) {
+                            else if (positionPointer.CurrentPosition < prevPointer.CurrentPosition) {
+                                positionPointer.MoveForwardUntilGreaterThanOrEqualTo(prevPointer.CurrentPosition);
+                                if (positionPointer.CurrentPosition - 1 == prevPointer.CurrentPosition) {
                                     currentRunOn++;
                                 }    
                             }
@@ -225,8 +266,8 @@ namespace Engine {
 
                 for (int i = 0; i <= firstBreakPoint; i++) {
                     var positionPointer = positionPointers[i];
-                    if (!positionPointer.emptyPointer && positionPointer.isValid) {
-                        positionPointer.moveForward();
+                    if (!positionPointer.EmptyPointer && positionPointer.IsValid) {
+                        positionPointer.MoveForward();
                     }
                 }
 
@@ -242,16 +283,16 @@ namespace Engine {
             var smallestPointers = new List<TokenPointer>();
 
             while (true) {
-                smallestPointers.Add(_queue.Dequeue());
+                smallestPointers.Add(_pointersQueue.Dequeue());
 
-                if (_queue.Count == 0) {
+                if (_pointersQueue.Count == 0) {
                     break;
                 }
 
                 var leastPointer = smallestPointers[0];
-                var leastPointerInQueue = _queue.First;
+                var leastPointerInQueue = _pointersQueue.First;
 
-                if (leastPointer.target.documentPosition != leastPointerInQueue.target.documentPosition) {
+                if (leastPointer.Target.DocumentPosition != leastPointerInQueue.Target.DocumentPosition) {
                     break;
                 }
             }

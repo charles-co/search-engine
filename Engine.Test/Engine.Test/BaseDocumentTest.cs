@@ -26,9 +26,9 @@ namespace Engine.Test
 
             _output.WriteLine("Test running.");
 
-            Assert.True(doc1.documentId == documentId);
-            Assert.True(doc2.name == name && doc2.url == url);
-            Assert.True(doc3.name == name && doc2.url == url && doc3.documentId == documentId);
+            Assert.True(doc1.DocumentId == documentId);
+            Assert.True(doc2.Name == name && doc2.Url == url);
+            Assert.True(doc3.Name == name && doc2.Url == url && doc3.DocumentId == documentId);
         }
     }
 }

@@ -1,34 +1,31 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using MongoDB.Bson;
 
 namespace Engine {
     public class TokenItem {
-        public List<int> positions = new List<int>();
-        public string documentId;
-        public long documentPosition;
+        public readonly List<int> Positions = new List<int>();
+        public readonly string DocumentId;
+        public readonly long DocumentPosition;
         public TokenItem(int position, string documentId, long documentPosition) {
-            positions.Add(position);
-            this.documentId = documentId;
-            this.documentPosition = documentPosition;
+            Positions.Add(position);
+            DocumentId = documentId;
+            DocumentPosition = documentPosition;
         }
         
         public TokenItem(List<int> positions, string documentId, long documentPosition) {
-            this.positions = positions;
-            this.documentId = documentId;
-            this.documentPosition = documentPosition;
+            Positions = positions;
+            DocumentId = documentId;
+            DocumentPosition = documentPosition;
         }
         
         public void AddPosition(int position) {
-            positions.Add(position);
+            Positions.Add(position);
         }
 
         public BsonArray GetBsonPositions() {
             var positionsArray = new BsonArray();
 
-            foreach (var position in positions) {
+            foreach (var position in Positions) {
                 positionsArray.Add(position);
             }
 
