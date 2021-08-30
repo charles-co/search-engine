@@ -62,7 +62,7 @@ namespace Engine {
         /// <summary>
         /// This is used to convert the db document instances to a BSON document which is useful for saving to the db
         /// </summary>
-        /// <returns>Returns an array of BsonArray</returns>
+        /// <returns>Returns <see cref="BsonArray"/> of documents</returns>
         private BsonArray GetBsonDocuments() {
             var documentsArray = new BsonArray();
             foreach (var document in Documents) {

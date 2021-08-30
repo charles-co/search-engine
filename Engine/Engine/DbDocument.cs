@@ -19,7 +19,7 @@ namespace Engine {
         /// Creates a new instance of <see cref="DbDocument"/>
         /// </summary>
         /// <param name="position">Position of document in list of documents</param>
-        /// <param name="documentId">Document uuid</param>
+        /// <param name="documentId">Document id</param>
         /// <param name="url">Url of document</param>
         /// <param name="name">Name of document</param>
         private DbDocument(long position, string documentId, string url, string name) : base(name, url, documentId) {
