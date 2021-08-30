@@ -37,6 +37,11 @@ namespace Engine {
         /// </summary>
         private List<TokenPointer> arrangedPointers = new List<TokenPointer>();
 
+        /// <summary>
+        /// This is used to get past queries for autocomplete suggestions
+        /// </summary>
+        /// <param name="query">The current user input</param>
+        /// <returns>Returns string of suggestions</returns>
         public static string[] GetPastQueries(string query) {
             var getQueriesFilter = Builders<BsonDocument>.Filter.Regex("query", new BsonRegularExpression($"^{query}"));
             var savedQueriesCollection = Connector.GetSavedQueriesCollection();
@@ -50,6 +55,11 @@ namespace Engine {
             return queries;
         }
         
+        /// <summary>
+        /// Searches through the index and performs all necessary algorithms to get documents that match user query
+        /// </summary>
+        /// <param name="query">User query</param>
+        /// <returns>Array of <see cref="BaseDocument"/></returns>
         public async Task<BaseDocument []> Search(string query) {
             try {
                 var cleanedWords = Utils.CleanAndExtractWords(query);
@@ -82,18 +92,24 @@ namespace Engine {
             return _resultDocuments;
         }
 
+        /// <summary>
+        /// This saves a user query to the database in order for it to be used for autocomplete in the future
+        /// </summary>
+        /// <param name="query"></param>
         private async void SaveQueryToDb(string query) {
             var getFilter = Builders<BsonDocument>.Filter.Eq("query", query);
             var savedQueriesCollection = Connector.GetSavedQueriesCollection();
             var prevQuery = savedQueriesCollection.Find(getFilter).FirstOrDefault();
-
+            
             if (prevQuery != null) {
+                //If the query exists previously increase the count
                 var queryBson = prevQuery.ToBsonDocument();
                 int count = queryBson["count"].ToInt32();
                 var update = Builders<BsonDocument>.Update.Set("count", count + 1);
                 await savedQueriesCollection.UpdateOneAsync(getFilter, update);
             }
             else {
+                //Else create a new query
                 var token = new BsonDocument {
                     {"query", query},
                     {"count", 1},
@@ -105,6 +121,10 @@ namespace Engine {
             Console.WriteLine($"{query} saved to saved queries collection");
         }
         
+        
+        /// <summary>
+        /// Fetched the scored document details from the database
+        /// </summary>
         private async Task FetchDocumentDetails() {
             string[] resultIds = new string[_scoresQueue.Count];
             _resultDocuments = new BaseDocument[_scoresQueue.Count];
@@ -139,6 +159,11 @@ namespace Engine {
             }
         }
 
+        /// <summary>
+        /// Generates the pointers user for linear mapping
+        /// </summary>
+        /// <param name="targetIndex">An instance of <see cref="Index"/></param>
+        /// <param name="words">The words we want to generate pointers for</param>
         private void GeneratePointers(Index targetIndex, string [] words) {
             _pointersQueue = new StablePriorityQueue<TokenPointer>(words.Length);
             _scoresQueue = new SimplePriorityQueue<ScoreDocumentNode>();
@@ -155,6 +180,10 @@ namespace Engine {
             }
         }
 
+        
+        /// <summary>
+        /// This function is used to map through the pointers and generate scores
+        /// </summary>
         private void LinearMap() {
             List<TokenPointer> smallestPointers = ExtractSmallest();
             ScorePointers(smallestPointers);
@@ -169,6 +198,10 @@ namespace Engine {
             }
         }
 
+        /// <summary>
+        /// Gives tf idf scores for each word per document and also calls consecutive words function
+        /// </summary>
+        /// <param name="pointers">The pointers to be scored</param>
         private void ScorePointers(List<TokenPointer> pointers) {
             double documentScore = 0;
 
@@ -190,11 +223,17 @@ namespace Engine {
             _scoresQueue.Enqueue(new ScoreDocumentNode(targetDocumentId), (float) documentScore);
         }
 
+        /// <summary>
+        /// This scores the phrases in a particular document
+        /// </summary>
+        /// <param name="targetDocumentId">The current document we're scoring</param>
+        /// <returns>The consecutive score of the document</returns>
         private double ScoreConsecutiveWords(string targetDocumentId) {
             //Total consecutive count
             int consecutiveCount = 0;
             List<PositionPointer> positionPointers = new List<PositionPointer>();
             
+            //Fills up position pointers array
             foreach (var pointer in arrangedPointers) {
                 if (pointer.EmptyPointer) {
                     positionPointers.Add(new PositionPointer());   
@@ -282,6 +321,7 @@ namespace Engine {
                     firstBreakPoint = positionPointers.Count - 1;
                 }
 
+                //Moved forward all the words that were before the first breakpoint
                 for (int i = 0; i <= firstBreakPoint; i++) {
                     var positionPointer = positionPointers[i];
                     if (!positionPointer.EmptyPointer && positionPointer.IsValid) {
@@ -297,6 +337,11 @@ namespace Engine {
             return consecutiveCount;
         }
 
+        /// <summary>
+        /// Used for extracting all the pointers for the current target document.
+        /// Since we're using linear mapping this will get the lowest position document
+        /// </summary>
+        /// <returns>Returns pointers for current document</returns>
         private List<TokenPointer> ExtractSmallest() {
             var smallestPointers = new List<TokenPointer>();
 
