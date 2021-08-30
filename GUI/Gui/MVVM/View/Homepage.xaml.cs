@@ -27,6 +27,9 @@ namespace Gui.MVVM.View
             bindListBox();
         }
 
+        List<SearchResult> ResultsList = new List<SearchResult>();
+
+
         private readonly string[] result = { "Stanley","Stans","Osy","Femi","Christian", "Stanley", "Stans", "Osy", "Femi", "Christian", "Stanley", "Stans", "Osy", "Femi", "Christian", "Stanley", "Stans", "Osy", "Femi", "Christian", "Stanley", "Stans", "Osy", "Femi", "Christian", "Stanley", "Stans", "Osy", "Femi", "Christian" };
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
