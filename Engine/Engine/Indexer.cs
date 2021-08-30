@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
-using java.lang;
 using TikaOnDotNet.TextExtraction;
 using Exception = System.Exception;
 
 
 namespace Engine {
-    public class Indexer {
-        private static Queue<DbDocument> toBeIndexed = new Queue<DbDocument>();
+    public static class Indexer {
+        private static readonly Queue<DbDocument> ToBeIndexed = new Queue<DbDocument>();
 
-        private static Semaphore _indexDoc = new Semaphore(1, 1);
+        private static readonly Semaphore IndexDocSemaphore = new Semaphore(1, 1);
 
         private static string ExtractText(string url) {
             var textExtractor = new TextExtractor();
@@ -22,20 +20,20 @@ namespace Engine {
         }
 
         public static void TryIndex(DbDocument dbDocument) {
-            toBeIndexed.Enqueue(dbDocument);
+            ToBeIndexed.Enqueue(dbDocument);
             IndexDocument();
         }
 
         private static async void IndexDocument() {
-            _indexDoc.WaitOne();
+            IndexDocSemaphore.WaitOne();
             try {
-                DbDocument dbDocument = toBeIndexed.Dequeue();
+                DbDocument dbDocument = ToBeIndexed.Dequeue();
 
                 Index newIndex = new Index();
 
-                Console.WriteLine($"Indexing document {dbDocument.position}");
+                Console.WriteLine($"Indexing document {dbDocument.Position}");
 
-                string text = ExtractText(dbDocument.url).Trim();
+                string text = ExtractText(dbDocument.Url).Trim();
 
                 string[] words = Utils.CleanAndExtractWords(text);
 
@@ -45,13 +43,13 @@ namespace Engine {
 
                 await newIndex.SaveToDb();
 
-                Console.WriteLine($"Done indexing document {dbDocument.position}");
+                Console.WriteLine($"Done indexing document {dbDocument.Position}");
             }
             catch (Exception e) {
                 Console.WriteLine(e.StackTrace, e.Message); //TODO: Log to file
             }
 
-            _indexDoc.Release();
+            IndexDocSemaphore.Release();
         }
     }
 }

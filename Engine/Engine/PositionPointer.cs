@@ -1,43 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Engine {
     public class PositionPointer {
-        public List<int> positions;
-        public int index = 0;
-        public bool emptyPointer = false;
-        public bool isValid = false;
+        private readonly List<int> _positions;
+        private int _index;
+        public readonly bool EmptyPointer;
+        public readonly bool IsValid;
         
         public PositionPointer() {
-            emptyPointer = true;
+            EmptyPointer = true;
         }
         
         public PositionPointer(List<int> positions, bool isValid) {
-            this.positions = positions;
-            this.isValid = isValid;
+            _positions = positions;
+            IsValid = isValid;
         }
 
-        public int currentPosition {
+        public int CurrentPosition {
             get {
-                if (emptyPointer) {
+                if (EmptyPointer) {
                     return -1;
                 }
                 
-                if (index < positions.Count) {
-                    return positions[index];
+                if (_index < _positions.Count) {
+                    return _positions[_index];
                 }
 
                 return -1;
             }
         }
         
-        public void moveForward() {
-            index++;
+        public void MoveForward() {
+            _index++;
         }
 
-        public void moveForwardUntilGreaterThanOrEqualTo(int target) {
-            while (currentPosition < target && index < positions.Count) {
-                moveForward();
+        public void MoveForwardUntilGreaterThanOrEqualTo(int target) {
+            while (CurrentPosition < target && _index < _positions.Count) {
+                MoveForward();
             }
         }
     }

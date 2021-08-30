@@ -1,22 +1,20 @@
 ﻿namespace Engine {
     public class BaseDocument {
-        public string name;
-        public string url;
-        public string documentId;
+        public string Name;
+        public string Url;
+        public readonly string DocumentId;
 
         public BaseDocument(string documentId) {
-            this.documentId = documentId;
+            DocumentId = documentId;
         }
 
         public BaseDocument(string name, string url) {
-            this.name = name;
-            this.url = url;
+            Name = name;
+            Url = url;
         }
         
-        public BaseDocument(string name, string url, string documentId) {
-            this.name = name;
-            this.url = url;
-            this.documentId = documentId;
+        public BaseDocument(string name, string url, string documentId) : this(name, url) {
+            DocumentId = documentId;
         }
     }
 }

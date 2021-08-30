@@ -7,25 +7,25 @@ using MongoDB.Driver;
 
 namespace Engine {
     public class DbDocument : BaseDocument {
-        public long position;
-        private static Queue<BaseDocument> toBeIndexed = new Queue<BaseDocument>();
+        public readonly long Position;
+        private static readonly Queue<BaseDocument> ToBeIndexed = new Queue<BaseDocument>();
 
-        private static Semaphore _indexDoc = new Semaphore(1, 1);
+        private static readonly Semaphore SaveDocSemaphore = new Semaphore(1, 1);
         private DbDocument(long position, string documentId, string url, string name) : base(name, url, documentId) {
-            this.position = position;
+            Position = position;
         }
 
         public static void IndexDocument(string name, string url) {
-            toBeIndexed.Enqueue(new BaseDocument(name, url));
+            ToBeIndexed.Enqueue(new BaseDocument(name, url));
             SaveToDb();
         }
 
         private static async void SaveToDb() {
-            _indexDoc.WaitOne();
-            var currentDocument = toBeIndexed.Dequeue();
+            SaveDocSemaphore.WaitOne();
+            var currentDocument = ToBeIndexed.Dequeue();
             if (currentDocument == null) return;
-            var name = currentDocument.name;
-            var url = currentDocument.url;
+            var name = currentDocument.Name;
+            var url = currentDocument.Url;
 
             var collection = Connector.GetDocumentsCollection();
             var documentIndex = await collection.CountDocumentsAsync(new BsonDocument());
@@ -42,7 +42,7 @@ namespace Engine {
 
             Console.WriteLine($"Document {name} saved to database");
 
-            _indexDoc.Release();
+            SaveDocSemaphore.Release();
 
             Indexer.TryIndex(new DbDocument(documentIndex, createdDoc["_id"].ToString(), url, createdDoc["name"].ToString()));
         }

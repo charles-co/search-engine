@@ -3,33 +3,25 @@ using Priority_Queue;
 
 namespace Engine {
     public class TokenPointer : StablePriorityQueueNode {
-        public List<TokenItem> targets;
-        public Token token;
-        public int index = 0;
-        public bool emptyPointer = false;
+        private readonly List<TokenItem> _targets;
+        public readonly Token Token;
+        private int _index;
+        public readonly bool EmptyPointer;
         
-        public TokenItem target {
-            get {
-                if (index < targets.Count) {
-                    return targets[index];
-                }
-
-                return null;
-            }
-        }
+        public TokenItem Target => _index < _targets.Count ? _targets[_index] : null;
 
         public TokenPointer() {
-            emptyPointer = true;
+            EmptyPointer = true;
         }
 
         public TokenPointer(Token targetToken) {
-            token = targetToken;
-            targets = targetToken.documents;
+            Token = targetToken;
+            _targets = targetToken.Documents;
         }
 
-        public bool moveForward() {
-            if (index + 1 < targets.Count) {
-                index++;
+        public bool MoveForward() {
+            if (_index + 1 < _targets.Count) {
+                _index++;
                 return true;
             }
 

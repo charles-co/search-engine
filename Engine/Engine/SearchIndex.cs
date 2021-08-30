@@ -13,7 +13,7 @@ namespace Engine {
                 var word = token["word"].ToString();
                 var documents = token["documents"].AsBsonArray.ToArray();
                 var frequency = token["frequency"].ToInt32();
-                tokens[word] = new Token(word, documents, frequency);
+                Tokens[word] = new Token(word, documents, frequency);
             }
         }
     }

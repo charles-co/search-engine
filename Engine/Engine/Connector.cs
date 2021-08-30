@@ -2,38 +2,31 @@
 using MongoDB.Driver;
 
 namespace Engine {
-    public class Connector {
-        private static MongoClient Client;
+    public static class Connector {
+        private static MongoClient _client;
 
-        private static string database = "404Db";
-        private static string mongoURL =
-            $"mongodb://127.0.0.1:27017/{database}?retryWrites=true&w=majority";
+        private static string _database = "404Db";
+        private static string _mongoUrl =
+            $"mongodb://127.0.0.1:27017/{_database}?retryWrites=true&w=majority";
         
         public static void GenerateDb() {
-            Client = new MongoClient(mongoURL);
+            _client = new MongoClient(_mongoUrl);
         }
 
         public static void SetTestMode()
         {
-            database = "404Db_Test";
-            mongoURL = $"mongodb://127.0.0.1:27017/{database}?retryWrites=true&w=majority";
+            _database = "404Db_Test";
+            _mongoUrl = $"mongodb://127.0.0.1:27017/{_database}?retryWrites=true&w=majority";
         }
 
         private static IMongoDatabase GetDb() {
-            if (Client == null) {
-                Client = new MongoClient(mongoURL);
+            if (_client == null) {
+                _client = new MongoClient(_mongoUrl);
             }
 
-            return Client.GetDatabase(database);
+            return _client.GetDatabase(_database);
         }
 
-        //TODO: Make word the index to make retrieval faster
-        // private static async void BuildDocumentIndex(IMongoDatabase db) {
-        //     var collection = db.GetCollection<BsonDocument>("tokens");
-        //     var indexKeysDefinition = Builders<BsonDocument>.IndexKeys.Ascending(token => token.word);
-        //     await collection.Indexes.CreateOneAsync(new CreateIndexModel<BsonDocument>(indexKeysDefinition));
-        // }
-        
         public static IMongoCollection<BsonDocument> GetDocumentsCollection() {
             var db = GetDb();
             return db.GetCollection<BsonDocument>("documents");

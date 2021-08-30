@@ -24,11 +24,11 @@ namespace Gui.MVVM.View {
         private void SelectFileBtn_Click(object sender, RoutedEventArgs e) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
-            // openFileDialog.Filter =
-            //     "Word Documents|*.doc|Excel Worksheets|*.xls,*.xlsx|PowerPoint Presentations|*.ppt,*.ppts" +
-            //     "|Office Files|*.doc;*.xls;*.ppt;*.pdf;*.docx;" +
-            //     "|Web files|*.html,*.xml" +
-            //     "|Text files|*.txt";
+            openFileDialog.Filter =
+                "Word Documents|*.doc|Excel Worksheets|*.xls,*.xlsx|PowerPoint Presentations|*.ppt,*.ppts" +
+                "|Office Files|*.doc;*.xls;*.ppt;*.pdf;*.docx;" +
+                "|Web files|*.html,*.xml" +
+                "|Text files|*.txt";
 
             if (openFileDialog.ShowDialog() == true) {
                 SelectFileButton.Content = "Change File";
