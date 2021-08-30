@@ -1,16 +1,39 @@
-initial commands to run in Api/ directory(where you have .csproj):
+# Search Engine Project
 
-Start postgresql service if using docker
-1. docker-compose up --build 
+This repository contains a search engine project with the following parts
 
-2. dotnet build
-if no error, goto 3
+- Engine
 
-3. dotnet ef migrations add InitialMigration
+This is the main engine class library that handles indexing the documents and querying the indexes
 
-4. dotnet ef database update
+- Engine.Test
 
-run project, or whatever you choose e.g F5 on visual studio code yadayadyadaa
-5. dotnet run
+This contains the tests which are used to verify that the Engine is performing the actions that it should
 
-If you made it here, omoo welldone & goodluck youll need alot (: !!!!
+- GUI
+
+This is a GUI written in [WPF](https://docs.microsoft.com/en-us/visualstudio/designers/getting-started-with-wpf). 
+It consumes the Engine class library directly and provides a UI for searching documents and uploading new documents to be indexed 
+
+- API
+
+This is a rest API written with .NET framework that consumes the Engine and provides endpoints for searching and indexing documents
+
+## How to Run
+- Engine
+
+Set a MONGODB_URI environment variable and build the project into a dll file
+
+- Engine.Test
+
+Ensure the Engine project is built then open this project and run it in any IDE of your choice
+
+- GUI
+
+Ensure the Engine project is built.
+Setup your AWS secrets and credentials using the instructions [here](https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/quick-start-s3-1-cross.html).
+
+- API
+
+Ensure the engine project is built.
+Install the required server for running the project eg [Windows](https://docs.microsoft.com/en-us/iis/extensions/introduction-to-iis-express/iis-express-overview)
