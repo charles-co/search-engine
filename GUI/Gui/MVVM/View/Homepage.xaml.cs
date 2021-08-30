@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,37 +13,67 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Engine;
 
-namespace Gui.MVVM.View
-{
+namespace Gui.MVVM.View {
     /// <summary>
     /// Interaction logic for Homepage.xaml
     /// </summary>
-    public partial class Homepage : UserControl
-    {
-        public Homepage()
-        {
+    public partial class Homepage : UserControl {
+        public Homepage() {
             //From the App.xaml
             InitializeComponent();
-            bindListBox();
         }
-
-        private readonly string[] result = { "Stanley","Stans","Osy","Femi","Christian", "Stanley", "Stans", "Osy", "Femi", "Christian", "Stanley", "Stans", "Osy", "Femi", "Christian", "Stanley", "Stans", "Osy", "Femi", "Christian", "Stanley", "Stans", "Osy", "Femi", "Christian", "Stanley", "Stans", "Osy", "Femi", "Christian" };
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        
+        private BaseDocument[] _documents;
+        
+        private void OnKeyDownHandler(object sender, KeyEventArgs e)
         {
-            Console.Write(e);
+            if (e.Key == Key.Return)
+            {
+                Button_OnSearch(sender, e);
+            }
         }
+        
+        private async void Button_OnSearch(object sender, RoutedEventArgs routedEventArgs) {
+            var start = DateTime.Now;
+            var querier = new Querier();
+            _documents = await querier.Search(SearchInput.Text);
+            var seconds = (DateTime.Now - start).TotalMilliseconds;
+            
+            SearchResults.Children.Clear();
 
-        //Bind result array to SearchResults
-        private void bindListBox()
-        {
-            SearchResults.ItemsSource = result;
-        }
+            var endText = _documents.Length != 1 ? "s" : "";
+            NumberOfResults.Text = $"{_documents.Length} Result{endText}";
 
-        private void SearchResults_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            MessageBox.Show(SearchResults.SelectedItem.ToString(), "Search Results", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+            if (_documents.Length > 0) {
+
+                ResponseTime.Text = $"Response time: {seconds}ms";
+
+                foreach (var document in _documents) {
+                    TextBlock tb = new TextBlock();
+                    tb.Style = Resources["DownloadLinkWrapper"] as Style;
+
+                    Hyperlink hyperlink = new Hyperlink();
+                    Run run = new Run();
+
+                    run.Text = document.name;
+                    hyperlink.NavigateUri = new Uri(document.url);
+                    hyperlink.Style = Resources["DownloadLink"] as Style;
+                    hyperlink.Inlines.Add(run);
+
+                    hyperlink.RequestNavigate += (_, e) => { System.Diagnostics.Process.Start(e.Uri.ToString()); };
+
+                    tb.Inlines.Add(hyperlink);
+                    SearchResults.Children.Add(tb);
+                }
+            }
+            else {
+                TextBlock tb = new TextBlock();
+                tb.Style = Resources["DownloadLinkWrapper"] as Style;
+                tb.Text = $"No Items match your search query: {SearchInput.Text}";
+                SearchResults.Children.Add(tb);
+            }
         }
     }
 }

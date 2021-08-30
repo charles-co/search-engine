@@ -10,6 +10,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Components/MenuButton.xaml"/>
                 <ResourceDictionary Source="Components/SearchInput.xaml"/>
+                <ResourceDictionary Source="Components/SearchButton.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type viewModel:HomepageViewModel}">

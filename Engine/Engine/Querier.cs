@@ -14,7 +14,7 @@ namespace Engine {
         private SimplePriorityQueue<ScoreDocumentNode> _scores;
         private long _documentsCount;
         private BaseDocument [] _resultDocuments;
-        private List<TokenPointer> arrangedPointers = new List<TokenPointer>(); //TODO: This is to correct consecutive
+        private List<TokenPointer> arrangedPointers = new List<TokenPointer>();
         
         public async Task<BaseDocument []> Search(string query) {
             try {

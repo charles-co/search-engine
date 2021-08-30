@@ -1,4 +1,5 @@
 ﻿using System;
+using Engine;
 using Gui.Core;
 
 namespace Gui.MVVM.ViewModel
@@ -54,6 +55,8 @@ namespace Gui.MVVM.ViewModel
             {
                 CurrentView = AboutVM;
             });
+            
+            Connector.GenerateDb();
         }
     }
 }

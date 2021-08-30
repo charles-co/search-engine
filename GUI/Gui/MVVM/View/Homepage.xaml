@@ -1,49 +1,70 @@
 ﻿<UserControl x:Class="Gui.MVVM.View.Homepage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Gui.MVVM.View"
-             mc:Ignorable="d" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style x:Key="DownloadLink">
+            <Setter Property="Hyperlink.Foreground" Value="#2e6ae7" />
+            <Setter Property="Hyperlink.FontSize" Value="16" />
+        </Style>
+        <Style x:Key="DownloadLinkWrapper">
+            <Setter Property="TextBlock.Padding" Value="20 10" />
+        </Style>
+    </UserControl.Resources>
     <StackPanel>
         <StackPanel.Background>
-            <SolidColorBrush Color="Black" Opacity="0.4"/>
+            <SolidColorBrush Color="Black" Opacity="0.4" />
         </StackPanel.Background>
         <StackPanel>
-            <TextBox Width="436"
-                       Height="58"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Left"
-                       Grid.Column="1" 
-                       FontSize="18"
-                       Style="{StaticResource ModernTextbox}" Margin="0,12,0,10" TextChanged="TextBox_TextChanged"
-        />
+            <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="36" Margin="20 20 0 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <TextBox
+                    Height="36"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Stretch"
+                    Grid.ColumnSpan="3"
+                    FontSize="18"
+                    Name="SearchInput" KeyDown="OnKeyDownHandler"/>
+                <Button Grid.Column="3" Style="{StaticResource SearchButton}" Click="Button_OnSearch">
+                    Search
+                </Button>
+            </Grid>
             <TextBlock Text="Search Results"
-                   Foreground="White"
-                   FontSize="32"
-                   HorizontalAlignment="Left"
-                   Margin="16,0,0,10"/>
+                       Foreground="White"
+                       FontSize="32"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Height="50"
+                       Margin="16,0,0,0" />
 
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="10 Result(s)"
-                   Foreground="#cccccc"
-                   FontSize="18"
-                   HorizontalAlignment="Left"
-                   Margin="10,0,0,20"/>
+                <TextBlock
+                    Foreground="#cccccc"
+                    FontSize="18"
+                    HorizontalAlignment="Left"
+                    Margin="20,0,0,20"
+                    Name="NumberOfResults" />
 
-                <TextBlock Text="Response time: 0.02s"
-                   Foreground="#cccccc"
-                   FontSize="18"
-                   HorizontalAlignment="Left"
-                   Margin="15,0,0,20"/>
+                <TextBlock
+                    Foreground="#cccccc"
+                    FontSize="18"
+                    HorizontalAlignment="Left"
+                    Margin="15,0,0,20"
+                    Name="ResponseTime" />
             </StackPanel>
         </StackPanel>
-        <ListBox x:Name="SearchResults" SelectionChanged="SearchResults_SelectionChanged" Margin="21,0,35,0" Height="300">
-            <ListBox.Background>
-                <SolidColorBrush Color="Black" Opacity="0.5"/>
-            </ListBox.Background>
-        </ListBox>
+        <ScrollViewer Height="300" VerticalScrollBarVisibility="Auto">
+            <StackPanel VerticalAlignment="Top" Name="SearchResults" Background="#f5f8fe" Margin="20 0 35 0" />
+        </ScrollViewer>
     </StackPanel>
-    
+
 </UserControl>

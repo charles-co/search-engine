@@ -7,7 +7,6 @@ namespace Engine {
 
         private static string database = "404Db";
         private static string mongoURL =
-            // "mongodb+srv://dbuser:crypticpassword@findr.wwrf5.mongodb.net/404Db?retryWrites=true&w=majority";
             $"mongodb://127.0.0.1:27017/{database}?retryWrites=true&w=majority";
         
         public static void GenerateDb() {
